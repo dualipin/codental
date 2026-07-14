@@ -12,6 +12,7 @@ use App\Models\EnfDieTrat;
 use App\Models\OdontoInicial;
 use App\Models\OdontoTrat;
 use App\Models\Paciente;
+use App\UserRolEnum;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -294,7 +295,7 @@ class OdontogramaController extends Controller
 
         $query = Paciente::query()->orderBy('pnom')->orderBy('papp');
 
-        if (! in_array($rol, ['admin', 'recep'], true) && $usuarioSesion) {
+        if (! in_array($rol, [UserRolEnum::ADMINISTRADOR->value, UserRolEnum::RECEPCIONISTA->value], true) && $usuarioSesion) {
             $query->where('d_user', $usuarioSesion);
         }
 

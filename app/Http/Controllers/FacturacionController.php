@@ -6,6 +6,7 @@ use App\Models\Abono;
 use App\Models\CajaPac;
 use App\Models\Paciente;
 use App\Models\PacTratSel;
+use App\UserRolEnum;
 use Illuminate\Http\Request;
 
 class FacturacionController extends Controller
@@ -13,10 +14,10 @@ class FacturacionController extends Controller
     public function index(Request $request)
     {
         $rol = session('rol');
-        $puedeRegistrar = $rol === 'recep';
+        $puedeRegistrar = $rol === UserRolEnum::RECEPCIONISTA->value;
 
         $queryPacientes = Paciente::query()->orderBy('pnom')->orderBy('papp');
-        if (! in_array($rol, ['admin', 'recep'], true)) {
+        if (! in_array($rol, [UserRolEnum::ADMINISTRADOR->value, UserRolEnum::RECEPCIONISTA->value], true)) {
             $usuarioSesion = session('usuario_model') ?: session('id_usuario') ?: session('usuario');
             $queryPacientes->where('d_user', $usuarioSesion);
         }
@@ -164,7 +165,7 @@ class FacturacionController extends Controller
 
     private function authorizeRecep(): void
     {
-        if (session('rol') !== 'recep') {
+        if (session('rol') !== UserRolEnum::RECEPCIONISTA->value) {
             abort(403, 'Solo recepción puede registrar o modificar pagos.');
         }
     }

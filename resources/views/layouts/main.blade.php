@@ -17,7 +17,7 @@
 
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/main.ts'])
     @endif
 </head>
 <body class="min-h-dvh flex flex-col bg-base-200 font-sans text-base-content antialiased">

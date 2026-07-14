@@ -8,6 +8,7 @@ use App\Models\OdontoInicial;
 use App\Models\OdontoTrat;
 use App\Models\Paciente;
 use App\Models\PacTratSel;
+use App\UserRolEnum;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 
@@ -164,7 +165,7 @@ class FichaPacienteController extends Controller
         $rol = session('rol');
         $usuarioSesion = session('usuario_model') ?: session('id_usuario') ?: session('usuario');
         $queryPacientes = Paciente::query()->orderBy('pnom')->orderBy('papp');
-        if (! in_array($rol, ['admin', 'recep'], true) && $usuarioSesion) {
+        if (! in_array($rol, [UserRolEnum::ADMINISTRADOR->value, UserRolEnum::RECEPCIONISTA->value], true) && $usuarioSesion) {
             $queryPacientes->where('d_user', $usuarioSesion);
         }
         $pacientesDisponibles = $queryPacientes->get(['idp', 'pnom', 'papp', 'papm']);

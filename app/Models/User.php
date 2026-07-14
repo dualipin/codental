@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\UserRolEnum;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -10,7 +11,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable([
+    'email',
+    'password',
+    'nombre',
+    'apellido_paterno',
+    'apellido_materno',
+    'sexo',
+    'especialidad',
+    'fecha_nacimiento',
+    'estado_civil',
+    'direccion',
+    'estado',
+    'municipio',
+    'telefono',
+    'rol',
+    'cedula',
+    'foto_usuario',
+])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -26,7 +44,9 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'fecha_nacimiento' => 'date',
             'password' => 'hashed',
+            'rol' => UserRolEnum::class,
         ];
     }
 }

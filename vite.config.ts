@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
-import vuePlugin from '@vitejs/plugin-vue'
+import vue from '@vitejs/plugin-vue'
 import inertia from '@inertiajs/vite'
 
 export default defineConfig({
@@ -11,8 +11,12 @@ export default defineConfig({
       refresh: true,
     }),
     tailwindcss(),
-    vuePlugin(),
-    inertia(),
+      vue({
+          template: { transformAssetUrls: { base: null, includeAbsolute: false } },
+      }),
+    inertia({
+        ssr: false,
+    }),
   ],
   server: {
     watch: {

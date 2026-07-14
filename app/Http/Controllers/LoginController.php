@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Credenciale;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    public function showLoginForm()
+    public function show()
     {
         return view('login');
     }
 
     public function login(Request $request)
     {
-        $request->validate([
-            'usuario' => ['required', 'string'],
-            'contrasena' => ['required', 'string'],
+        $credentials = $request->validate([
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
         ]);
 
-        $credencial = Credenciale::where('name', $request->input('usuario'))
-            ->where('pass', $request->input('contrasena'))
-            ->with('usuario')
-            ->first();
+        $usuario = User::where('email', $credentials['email'])->first();
 
-        if (! $credencial) {
+        if (! $usuario || ! Hash::check($credentials['password'], $usuario->password)) {
             return back()->withErrors(['error' => 'Usuario o contraseña incorrectos.']);
         }
 
-        $usuario = $credencial->usuario;
-
         session([
-            'usuario' => $credencial->name,
-            'id_usuario' => $credencial->user,
-            'nom' => trim(($usuario?->nom ?? '') . ' ' . ($usuario?->app ?? '') . ' ' . ($usuario?->apm ?? '')) ?: $credencial->name,
-            'rol' => $usuario?->rol,
-            'usuario_model' => $usuario?->user,
+            'usuario' => $usuario->email,
+            'id_usuario' => $usuario->id,
+            'nom' => trim("{$usuario->nombre} {$usuario->apellido_paterno} {$usuario->apellido_materno}"),
+            'rol' => $usuario->rol->value,
+            'usuario_model' => $usuario->id,
         ]);
 
         return redirect()->route('agenda');

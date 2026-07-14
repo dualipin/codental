@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cita;
 use App\Models\Usuario;
 use App\Models\Paciente;
+use App\UserRolEnum;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
@@ -19,15 +20,15 @@ class AgendaPersonalController extends Controller
         $usuarioSesion = session('usuario_model') ?: session('id_usuario') ?: session('usuario');
 
         $dentistas = collect();
-        if (in_array($rolUsuario, ['admin', 'recep'], true)) {
-            $dentistas = Usuario::whereIn('rol', ['dent', 'admin'])
+        if (in_array($rolUsuario, [UserRolEnum::ADMINISTRADOR->value, UserRolEnum::RECEPCIONISTA->value], true)) {
+            $dentistas = Usuario::whereIn('rol', [UserRolEnum::DENTISTA->value, UserRolEnum::ADMINISTRADOR->value])
                 ->orderBy('nom')
                 ->orderBy('app')
                 ->get();
         }
 
         $dentistaSeleccionado = $request->input('dentista');
-        if ($rolUsuario === 'dent') {
+        if ($rolUsuario === UserRolEnum::DENTISTA->value) {
             $dentistaSeleccionado = $usuarioSesion;
         } elseif (! $dentistaSeleccionado) {
             $dentistaSeleccionado = $dentistas->first()?->user ?? $usuarioSesion;
@@ -85,7 +86,7 @@ class AgendaPersonalController extends Controller
             });
 
         $pacientes = collect();
-        if (in_array($rolUsuario, ['admin', 'recep'], true)) {
+        if (in_array($rolUsuario, [UserRolEnum::ADMINISTRADOR->value, UserRolEnum::RECEPCIONISTA->value], true)) {
             $pacientes = Paciente::orderBy('pnom')->orderBy('papp')->get();
         } elseif ($usuarioSesion) {
             $pacientes = Paciente::where('d_user', $usuarioSesion)->orderBy('pnom')->orderBy('papp')->get();
@@ -148,7 +149,7 @@ class AgendaPersonalController extends Controller
 
     private function authorizeAgendaInterna(): void
     {
-        if (! in_array(session('rol'), ['admin', 'recep'], true)) {
+        if (! in_array(session('rol'), [UserRolEnum::ADMINISTRADOR->value, UserRolEnum::RECEPCIONISTA->value], true)) {
             abort(403, 'No autorizado.');
         }
     }

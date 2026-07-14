@@ -69,7 +69,7 @@
                 <div class="card hero-card p-4 h-100">
                     <h2 class="h5 mb-3">Filtro de agenda</h2>
                     <form method="GET" action="{{ route('agenda') }}" class="vstack gap-3">
-                        @if(in_array($rolUsuario, ['admin', 'recep'], true))
+                        @if(in_array($rolUsuario, [\App\UserRolEnum::ADMINISTRADOR->value, \App\UserRolEnum::RECEPCIONISTA->value], true))
                             <div>
                                 <label class="form-label">Dentista</label>
                                 <select name="dentista" class="form-select">
@@ -85,7 +85,7 @@
                         <button class="btn btn-primary" type="submit">Ver agenda</button>
                     </form>
 
-                    @if(in_array($rolUsuario, ['admin', 'recep'], true))
+                    @if(in_array($rolUsuario, [\App\UserRolEnum::ADMINISTRADOR->value, \App\UserRolEnum::RECEPCIONISTA->value], true))
                         <hr>
                         <h3 class="h6">Nueva cita interna</h3>
                         <form method="POST" action="{{ route('agenda.cita.store') }}" class="vstack gap-3">

@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Usuario;
 use App\Models\Credenciale;
+use App\UserRolEnum;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class RegisuserController extends Controller
 {
     public function create()
     {
         // Validación de rol basada en tu sesión actual
-        if (session('rol') !== 'admin') {
+        if (session('rol') !== UserRolEnum::ADMINISTRADOR->value) {
             return redirect('/inicio')->withErrors(['error' => 'No tienes permisos para registrar usuarios.']);
         }
         return view('/admin/registro_usuario');
@@ -20,7 +22,7 @@ class RegisuserController extends Controller
 
     public function store(Request $request)
     {
-        if (session('rol') !== 'admin') {
+        if (session('rol') !== UserRolEnum::ADMINISTRADOR->value) {
             return abort(403, 'Acción no autorizada.');
         }
 
@@ -39,7 +41,7 @@ class RegisuserController extends Controller
             'mun' => 'required|string|max:20',
             'tel' => 'required|string|max:10',
             'cor' => 'required|email|max:35|unique:usuarios,cor',
-            'rol' => 'required|string|max:5',   // Ajustado a máximo 5 caracteres (ej: 'admin', 'dent')
+            'rol' => ['required', Rule::enum(UserRolEnum::class)],
             
             // Datos para la tabla Credenciales
             'usuario_login' => 'required|string|max:30|unique:credenciales,name',
@@ -90,7 +92,7 @@ class RegisuserController extends Controller
     }
     public function showUsuarios()
     {
-        if (session('rol') !== 'admin') {
+        if (session('rol') !== UserRolEnum::ADMINISTRADOR->value) {
             return abort(403, 'Acción no autorizada.');
         }
 

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\UserRolEnum;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisuserController;
 use App\Http\Controllers\InicioController;
@@ -15,15 +16,8 @@ use App\Http\Controllers\FacturacionController;
 //Ruta publica inicial
 Route::get('/', [WelcomeController::class, 'index'])->name('nosotros');
 
+Route::get('/test', [WelcomeController::class, 'test'])->name('test');
 
-
-Route::get('img/sonrisa.jpg', function () {
-    return response()->file(public_path('img/sonrisa.jpg'));
-})->name('sonrisa_image');
-
-Route::get('img/tecn.jpg', function () {
-    return response()->file(public_path('img/tecn.jpg'));
-})->name('tecn_image');
 // --- RUTAS PÚBLICAS PARA PACIENTES (No logueados)
 Route::get('/citas_p', [CitaController::class, 'pantallaIdentificacion'])->name('agenda.identificacion');;
 Route::post('/verificar_paciente', [CitaController::class, 'verificarPaciente'])->name('agenda.verificar');
@@ -36,10 +30,11 @@ Route::post('/confirmar_cita', [CitaController::class, 'storeDesdePaciente'])->n
 
 
 // Rutas para autenticación
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::get('/login', [LoginController::class, 'show'])->name('login.show');
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
-Route::middleware('auth.personalizado')->group(function () {
+
+//Route::middleware('auth.personalizado')->group(function () {
     Route::get('/agenda', [AgendaPersonalController::class, 'indexPanel'])->name('agenda');
     Route::get('/panel/agenda', [AgendaPersonalController::class, 'indexPanel'])->name('agenda.panel');
 
@@ -59,13 +54,13 @@ Route::middleware('auth.personalizado')->group(function () {
     Route::post('/agenda/citas', [AgendaPersonalController::class, 'storeCitaInterna'])->name('agenda.cita.store');
     Route::get('/caja/facturacion', [FacturacionController::class, 'index'])->name('caja.facturacion');
 
-    Route::middleware('role.personalizado:admin,recep')->group(function () {
+    Route::middleware('role.personalizado:' . UserRolEnum::ADMINISTRADOR->value . ',' . UserRolEnum::RECEPCIONISTA->value)->group(function () {
         Route::post('/caja/facturacion/abonos', [FacturacionController::class, 'registrarAbono'])->name('caja.abonos.store');
         Route::put('/caja/facturacion/abonos/{abono}', [FacturacionController::class, 'actualizarAbono'])->name('caja.abonos.update');
         Route::post('/caja/facturacion/abonos/{abono}/anular', [FacturacionController::class, 'anularAbono'])->name('caja.abonos.anular');
     });
 
-    Route::middleware('role.personalizado:admin')->group(function () {
+    Route::middleware('role.personalizado:' . UserRolEnum::ADMINISTRADOR->value)->group(function () {
         Route::get('/admin/show_usuarios', [RegisuserController::class, 'showUsuarios'])->name('admin.show_usuarios');
         Route::get('/admin/registro_usuario', [RegisuserController::class, 'create'])->name('admin.registro_usuario');
         Route::post('/admin/registro_usuario', [RegisuserController::class, 'store'])->name('admin.registro_usuario.store');
@@ -73,11 +68,7 @@ Route::middleware('auth.personalizado')->group(function () {
     });
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-});
-Route::get('/welcome', function () {
-    return view('welcome');
-});
-
+//});
 
 
 

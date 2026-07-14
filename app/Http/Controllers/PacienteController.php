@@ -8,6 +8,7 @@ use App\Models\Paciente;
 use App\Models\Antecedente;
 use App\Models\Usuario;
 use App\Models\Cita;
+use App\UserRolEnum;
 use Carbon\Carbon;
 
 
@@ -23,7 +24,7 @@ class PacienteController extends Controller
             $q->orderByDesc('fec_i');
         }]);
 
-        if (! in_array($rol, ['admin', 'recep'], true) && $usuarioSesion) {
+        if (! in_array($rol, [UserRolEnum::ADMINISTRADOR->value, UserRolEnum::RECEPCIONISTA->value], true) && $usuarioSesion) {
             $query->where('d_user', $usuarioSesion);
         }
 
@@ -38,7 +39,7 @@ class PacienteController extends Controller
 
     public function create()
     {
-        $doctores = Usuario::whereIn('rol', ['dent', 'admin'])->orderBy('nom')->get();
+        $doctores = Usuario::whereIn('rol', [UserRolEnum::DENTISTA->value, UserRolEnum::ADMINISTRADOR->value])->orderBy('nom')->get();
 
         return view('pacientes.regispacientes', compact('doctores'));
     }

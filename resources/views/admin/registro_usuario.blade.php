@@ -17,7 +17,7 @@
 <body>
 @include('layouts.headerprof')
 <div class="container">
-    @if(session('rol') === 'admin')
+    @if(session('rol') === \App\UserRolEnum::ADMINISTRADOR->value)
         
         <h2>Registrar Nuevo Usuario (CoDentaL)</h2>
 
@@ -36,9 +36,9 @@
             <div class="form-group">
                 <label>Rol de Usuario (Ajustado a máximo 5 letras):</label>
                 <select name="rol" id="rol-select" required>
-                    <option value="dent">Dentista (dent)</option>
-                    <option value="recep">Recepcionista (recep)</option>
-                    <option value="admin">Administrador (admin)</option>
+                    <option value="{{ \App\UserRolEnum::DENTISTA->value }}">Dentista ({{ \App\UserRolEnum::DENTISTA->value }})</option>
+                    <option value="{{ \App\UserRolEnum::RECEPCIONISTA->value }}">Recepcionista ({{ \App\UserRolEnum::RECEPCIONISTA->value }})</option>
+                    <option value="{{ \App\UserRolEnum::ADMINISTRADOR->value }}">Administrador ({{ \App\UserRolEnum::ADMINISTRADOR->value }})</option>
                 </select>
             </div>
 
@@ -143,7 +143,7 @@
         var cedInput = document.getElementById('ced-input');
 
         function evaluarRol() {
-            if (rolSelect.value === 'recep') {
+            if (rolSelect.value === '{{ \App\UserRolEnum::RECEPCIONISTA->value }}') {
                 // Bloquea el input, limpia lo que esté escrito y quita la obligatoriedad
                 cedInput.disabled = true;
                 cedInput.value = '';

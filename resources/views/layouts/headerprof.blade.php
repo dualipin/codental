@@ -28,7 +28,7 @@
                 <li class="nav-item"><a class="nav-link {{ ($activeTab ?? '') === 'agenda' ? 'active' : 'text-white' }}" href="{{ route('agenda') }}">Agenda</a></li>
                 <li class="nav-item"><a class="nav-link {{ ($activeTab ?? '') === 'pacientes' ? 'active' : 'text-white' }}" href="{{ route('pacientes.index') }}">Pacientes</a></li>
                 <li class="nav-item"><a class="nav-link {{ ($activeTab ?? '') === 'caja' ? 'active' : 'text-white' }}" href="{{ route('caja.facturacion') }}">Caja</a></li>
-                @if((session('rol') ?? '') === 'admin')
+                @if((session('rol') ?? '') === \App\UserRolEnum::ADMINISTRADOR->value)
                     <li class="nav-item"><a class="nav-link {{ ($activeTab ?? '') === 'admin' ? 'active' : 'text-white' }}" href="{{ route('administracion') }}">Administración</a></li>
                 @endif
             </ul>

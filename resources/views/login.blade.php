@@ -18,12 +18,12 @@
                 <form method="POST" action="{{ route('login') }}" class="space-y-4">
                     @csrf
 
-                    <!-- Campo Usuario -->
+                    <!-- Campo Correo -->
                     <div class="form-control">
-                        <label class="label justify-start" for="usuario">
-                            <span class="label-text font-semibold">Usuario</span>
+                        <label class="label justify-start" for="email">
+                            <span class="label-text font-semibold">Correo electrónico</span>
                         </label>
-                        <input type="text" id="usuario" name="usuario" required
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" required
                                class="input input-bordered w-full focus:input-primary"/>
                     </div>
 
@@ -32,7 +32,7 @@
                         <label class="label justify-start" for="contrasena">
                             <span class="label-text font-semibold">Contraseña</span>
                         </label>
-                        <input type="password" id="contrasena" name="contrasena" required
+                        <input type="password" id="contrasena" name="password" required
                                class="input input-bordered w-full focus:input-primary"/>
                     </div>
 

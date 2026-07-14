@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cita;
 use App\Models\Usuario;
+use App\UserRolEnum;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Models\Paciente;
@@ -16,7 +17,7 @@ class CitaController extends Controller
     // Carga la primera vista (Modal / Selección)
     public function pantallaIdentificacion()
     {
-        $doctores = Usuario::where('rol', 'dent')->get();
+        $doctores = Usuario::where('rol', UserRolEnum::DENTISTA->value)->get();
     
     // Pasamos la variable a la vista de identificación
         return view('agenda.identificacion', compact('doctores'));
