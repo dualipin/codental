@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+    name: "main";
+    default: true;
+    prefersdark: false;
+    color-scheme: "light";
+    --color-base-100: oklch(98% 0.004 225);
+    --color-base-200: oklch(96% 0.006 225);
+    --color-base-300: oklch(92% 0.010 225);
+    --color-base-content: oklch(32% 0 0);
+    --color-primary: oklch(64% 0.139 91.059);
+    --color-primary-content: oklch(0.924 0.011 17.354);
+    --color-secondary: oklch(57% 0.139 260.651);
+    --color-secondary-content: oklch(100% 0 0);
+    --color-accent: oklch(55% 0.082 225.754);
+    --color-accent-content: oklch(100% 0 0);
+    --color-neutral: oklch(32% 0.03 255);
+    --color-neutral-content: oklch(98% 0.004 225);
+    --color-info: oklch(78% 0.154 211.53);
+    --color-info-content: oklch(30% 0.056 229.695);
+    --color-success: oklch(76% 0.177 163.223);
+    --color-success-content: oklch(26% 0.051 172.552);
+    --color-warning: oklch(82% 0.189 84.429);
+    --color-warning-content: oklch(27% 0.077 45.635);
+    --color-error: oklch(71% 0.194 13.428);
+    --color-error-content: oklch(27% 0.105 12.094);
+    --radius-selector: 1rem;
+    --radius-field: 1rem;
+    --radius-box: 2rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 0;
+    --noise: 0;
+}
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-serif: "Lora", ui-serif, Georgia, serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+    --font-display: "Fraunces", "Playfair Display", serif;
+}
