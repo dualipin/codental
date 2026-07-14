@@ -26,7 +26,6 @@ return new class extends Migration {
             $table->string('estado_civil', 100);
             $table->string('correo')->nullable();
             $table->string('religion', 100)->nullable();
-            $table->boolean('paciente_real')->default(false);
             $table->timestamps();
         });
 

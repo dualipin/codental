@@ -7,56 +7,15 @@ use Illuminate\Support\Str;
 
 class Paciente extends Model
 {
-    //
-    protected $table = 'pacientes';
-    protected $primaryKey = 'idp';
-    public $incrementing = false; // Como es un string (UUID o hash), desactivamos el autoincremento
-    protected $keyType = 'string';
+    protected $guarded = [];
 
-    protected $fillable = [
-        'idp', 'pnom', 'papp', 'papm', 'pnac', 'psex', 'pciv', 'ptel', 'pocu', 'pcor', 'pest', 'pmun', 'pdir','prel','penv','pmot', 'd_user', 'preal'
-    ];
-
-    // Relación: Un paciente tiene muchas citas
-    public function citas()
+    public function historiaClinica()
     {
-        return $this->hasMany(Cita::class, 'idp', 'idp'); 
+        return $this->hasOne(HistoriaClinica::class);
     }
 
-    protected static function boot()
+    public function consultas()
     {
-        parent::boot();
-        static::creating(function ($paciente) {
-            if (empty($paciente->idp)) {
-                $paciente->idp = (string) Str::uuid();
-            }
-        });
+        return $this->hasMany(Consulta::class);
     }
-
-    // Relación: Un paciente tiene un odontograma
-    public function odontogramasIniciales()
-    {
-        return $this->hasMany(OdontoInicial::class, 'id_pac');
-    }
-    
-    public function odontogramasTratamiento()
-    {
-        return $this->hasMany(OdontoTrat::class, 'id_pac');
-    }
-    
-    public function tratamientosSeleccionados()
-    {
-        return $this->hasMany(PacTratSel::class, 'id_pac');
-    }
-    
-    public function abonos()
-    {
-        return $this->hasMany(Abono::class, 'id_pac');
-    }
-    
-    public function caja()
-    {
-        return $this->hasOne(CajaPac::class, 'id_pac');
-    }
-
 }
