@@ -2,24 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Cita;
-use App\Models\Usuario;
 use App\UserRolEnum;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Models\Paciente;
+use Inertia\Inertia;
 
 
 class CitaController extends Controller
 {
-    
+
+    public function index()
+    {
+        return Inertia::render('AgendarCitaPage');
+    }
+
     // Carga la primera vista (Modal / Selección)
     public function pantallaIdentificacion()
     {
-        $doctores = Usuario::where('rol', UserRolEnum::DENTISTA->value)->get();
-    
-    // Pasamos la variable a la vista de identificación
+        $doctores = User::all()->where('rol', UserRolEnum::DENTISTA->value);
+
+        // Pasamos la variable a la vista de identificación
         return view('agenda.identificacion', compact('doctores'));
     }
 
@@ -41,7 +47,9 @@ class CitaController extends Controller
             ->first();
 
         if (!$paciente) {
-            return back()->withErrors(['error_paciente' => 'No se encontró ningún registro con los datos proporcionados.']);
+            return back()->withErrors(
+                ['error_paciente' => 'No se encontró ningún registro con los datos proporcionados.']
+            );
         }
 
         // Si existe, guardamos su ID en la sesión segura del servidor
@@ -61,7 +69,7 @@ class CitaController extends Controller
         // Recuperamos el ID de la sesión y buscamos al paciente con su doctor asignado
         $idPaciente = session('agenda_id_paciente');
         $paciente = Paciente::findOrFail($idPaciente);
-        
+
         // Obtenemos el doctor asignado directamente de la ficha del paciente
         $doctorAsignado = Usuario::where('user', $paciente->d_user)->first();
 
@@ -71,8 +79,8 @@ class CitaController extends Controller
             ->orderBy('fec_i')
             ->get();
 
-        $eventos = $citasRaw->map(function($cita) {
-            $estado = strtolower(trim((string) $cita->est));
+        $eventos = $citasRaw->map(function ($cita) {
+            $estado = strtolower(trim((string)$cita->est));
 
             if (in_array($estado, ['aceptada', 'aceptado', 'confirmada', 'confirmado'], true)) {
                 $color = '#16a34a';
@@ -85,7 +93,9 @@ class CitaController extends Controller
                 $estadoTexto = ucfirst($estado ?: 'Sin estado');
             }
 
-            $pacienteNombre = trim(($cita->paciente->pnom ?? '') . ' ' . ($cita->paciente->papp ?? '') . ' ' . ($cita->paciente->papm ?? ''));
+            $pacienteNombre = trim(
+                ($cita->paciente->pnom ?? '') . ' ' . ($cita->paciente->papp ?? '') . ' ' . ($cita->paciente->papm ?? '')
+            );
 
             return [
                 'title' => $pacienteNombre !== '' ? $pacienteNombre : 'Cita agendada',
@@ -99,7 +109,9 @@ class CitaController extends Controller
                 'extendedProps' => [
                     'estado' => $estado,
                     'estadoTexto' => $estadoTexto,
-                    'doctorName' => 'Dr(a). ' . trim(($doctorAsignado?->nom ?? '') . ' ' . ($doctorAsignado?->app ?? '')),
+                    'doctorName' => 'Dr(a). ' . trim(
+                            ($doctorAsignado?->nom ?? '') . ' ' . ($doctorAsignado?->app ?? '')
+                        ),
                     'paciente' => $pacienteNombre,
                     'doctorId' => $cita->d_user,
                 ],
@@ -133,7 +145,7 @@ class CitaController extends Controller
 
         // Verificar cruces de última hora
         $yaExiste = Cita::where('d_user', $paciente->d_user)
-            ->where(function($query) use ($inicio, $fin) {
+            ->where(function ($query) use ($inicio, $fin) {
                 $query->where('fec_i', '<', $fin)->where('fec_f', '>', $inicio);
             })->exists();
 
@@ -142,12 +154,12 @@ class CitaController extends Controller
         }
 
         Cita::create([
-            'idc'    => (string) Str::uuid(),
-            'idp'   => $paciente->idp, // ID seguro desde la base de datos
-            'fec_i'  => $inicio,
-            'fec_f'  => $fin,
+            'idc' => (string)Str::uuid(),
+            'idp' => $paciente->idp, // ID seguro desde la base de datos
+            'fec_i' => $inicio,
+            'fec_f' => $fin,
             'd_user' => $paciente->d_user, // Doctor asignado automáticamente
-            'est'    => 'pendiente'
+            'est' => 'pendiente'
         ]);
 
         // Limpiamos la sesión para que el proceso termine correctamente
@@ -156,5 +168,5 @@ class CitaController extends Controller
         return redirect()->route('agenda.identificacion')->with('success', '¡Cita agendada con éxito!');
     }
 
-    
+
 }

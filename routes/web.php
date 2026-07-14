@@ -28,6 +28,8 @@ Route::get('/programar_cita', [CitaController::class, 'pantallaAgenda'])->name('
 Route::post('/confirmar_cita', [CitaController::class, 'storeDesdePaciente'])->name('citas.store');
 
 
+Route::get('/agendar-cita',[CitaController::class, 'index'])->name('agendar-cita');
+
 
 // Rutas para autenticación
 Route::get('/login', [LoginController::class, 'show'])->name('login.show');

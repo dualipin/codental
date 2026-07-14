@@ -17,6 +17,7 @@
 
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+        @routes
         @vite(['resources/css/app.css', 'resources/js/app.ts'])
         @inertiaHead
     @endif
