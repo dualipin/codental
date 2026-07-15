@@ -2,18 +2,23 @@
 
 namespace App\Models;
 
+use App\Enums\TipoSeguimientoOdontogramaEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Odontograma extends Model
 {
+    protected $table = 'odontogramas';
     protected $guarded = [];
 
-    protected $casts = [
-        'estado_dientes' => 'array', // Guardará el mapeo de cada diente y su estado
-    ];
-
-    public function consulta()
+    public function odontologo()
     {
-        return $this->belongsTo(Consulta::class);
+        return $this->belongsTo(User::class, 'odontologo_id');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'tipo_seguimiento' => TipoSeguimientoOdontogramaEnum::class,
+        ];
     }
 }

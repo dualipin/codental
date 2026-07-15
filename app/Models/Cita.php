@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\EstatusCitaEnum;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Cita extends Model
 {
@@ -12,5 +12,12 @@ class Cita extends Model
     public function paciente()
     {
         return $this->belongsTo(Paciente::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'estatus' => EstatusCitaEnum::class,
+        ];
     }
 }
