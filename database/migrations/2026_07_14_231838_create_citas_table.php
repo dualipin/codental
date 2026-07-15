@@ -17,6 +17,7 @@ return new class extends Migration {
             // Datos del Paciente
             $table->foreignId('paciente_id')->constrained('pacientes')->cascadeOnDelete();
             $table->foreignId('dentista_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('creado_por_id')->nullable()->constrained('users')->nullOnDelete();
 
             $table->datetime('fecha_inicio');
             $table->datetime('fecha_fin');
