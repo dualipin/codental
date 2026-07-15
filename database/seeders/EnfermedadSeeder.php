@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CategoriaEnfermedadSeeder extends Seeder
+class EnfermedadSeeder extends Seeder
 {
 
     private array $categoria_enfermedades = [
