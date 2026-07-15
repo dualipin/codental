@@ -3,8 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Presupuesto extends Model
 {
-    //
+    protected $table = 'presupuestos';
+    protected $guarded = [];
+
+    public function paciente(): BelongsTo
+    {
+        return $this->belongsTo(Paciente::class, 'paciente_id');
+    }
+
+    public function dentista(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'dentista_id');
+    }
+
+    public function abonos(): HasMany
+    {
+        return $this->hasMany(Abono::class, 'presupuesto_id');
+    }
 }
