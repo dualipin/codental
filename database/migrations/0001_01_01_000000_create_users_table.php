@@ -1,5 +1,6 @@
 <?php
 
+use App\UserRolEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -27,7 +28,7 @@ return new class extends Migration {
             $table->string('estado');
             $table->string('municipio');
             $table->string('telefono', 10);
-            $table->string('rol', 10);
+            $table->string('rol', 10)->default(UserRolEnum::DENTISTA->value);
 
             $table->string('cedula')->nullable();
 

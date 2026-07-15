@@ -14,34 +14,34 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('paciente_id')->constrained()->cascadeOnDelete();
 
-            $table->text('motivo_consulta')->nullable(); //[cite: 1]
-            $table->text('antecedentes_hereditarios')->nullable(); //[cite: 1]
+            $table->text('motivo_consulta')->nullable();
+            $table->text('antecedentes_hereditarios')->nullable();
 
             // Antecedentes Patológicos (Integrando lo que vimos antes)
-            $table->text('alergias')->nullable(); //[cite: 1]
-            $table->text('medicacion_actual')->nullable(); //[cite: 1]
-            $table->string('nombre_medico')->nullable(); //[cite: 1]
-            $table->string('telefono_medico')->nullable(); //[cite: 1]
+            $table->text('alergias')->nullable();
+            $table->text('medicacion_actual')->nullable();
+            $table->string('nombre_medico')->nullable();
+            $table->string('telefono_medico')->nullable();
             $table->json('enfermedades_previas')->nullable(); // Para los checkboxes[cite: 1]
-            $table->string('otras_enfermedades_especifique')->nullable(); //[cite: 1]
+            $table->string('otras_enfermedades_especifique')->nullable();
 
             // Antecedentes No Patológicos (Agrupados en JSON para ahorrar columnas)
             $table->json('habitos_toxicos')->nullable(); // Tabaco, Alcohol, Drogas[cite: 1]
-            $table->string('grupo_sanguineo')->nullable(); //[cite: 1]
+            $table->string('grupo_sanguineo')->nullable();
             $table->json('ginecoobstetricos')->nullable(); // Embarazo, meses de bebe, lactancia[cite: 1]
             $table->json('estilo_vida')->nullable(); // Deporte, Alimentación, Higiene[cite: 1]
-            $table->text('cirugias_hospitalizaciones')->nullable(); //[cite: 1]
+            $table->text('cirugias_hospitalizaciones')->nullable();
 
             // Exploración y Aparatos
-            $table->text('padecimiento_actual')->nullable(); //[cite: 1]
-            $table->text('interrogatorio_sistemas')->nullable(); //[cite: 1]
-            $table->text('examenes_laboratorio')->nullable(); //[cite: 1]
+            $table->text('padecimiento_actual')->nullable();
+            $table->text('interrogatorio_sistemas')->nullable();
+            $table->text('examenes_laboratorio')->nullable();
 
             // Bucodentales y ATM
             $table->json('antecedentes_bucodentales')->nullable(
             ); // Ultima visita, cepillado, dolor, sangrado, habitos[cite: 1]
             $table->json('atm')->nullable(); // Clase Molar, Canina, Overjet, Overbite, chasquidos[cite: 1]
-            $table->text('tejidos_blandos_duros')->nullable(); //[cite: 1]
+            $table->text('tejidos_blandos_duros')->nullable();
 
             $table->timestamps();
         });

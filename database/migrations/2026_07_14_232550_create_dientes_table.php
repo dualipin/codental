@@ -10,10 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('categoria_cara_dientes', function (Blueprint $table) {
+        Schema::create('dientes', function (Blueprint $table) {
             $table->id();
+            $table->integer('numero_fdi');
             $table->string('nombre');
-            $table->text('descripcion')->nullable();
+            $table->char('cuadrante', 1);
+            $table->string('tipo');
+            $table->string('posicion');
             $table->timestamps();
         });
     }
@@ -23,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('categoria_cara_dientes');
+        Schema::dropIfExists('dientes');
     }
 };

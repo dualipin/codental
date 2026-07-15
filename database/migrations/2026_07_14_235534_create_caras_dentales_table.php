@@ -10,13 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('categoria_dientes', function (Blueprint $table) {
+        Schema::create('caras_dentales', function (Blueprint $table) {
             $table->id();
-            $table->integer('numero_fdi');
-            $table->string('nombre');
-            $table->char('cuadrante', 1);
-            $table->string('tipo');
-            $table->string('posicion');
+            $table->string('nombre');       // "Oclusal", "Mesial", etc.
+            $table->string('codigo', 2)->nullable();  // "O", "M", "D" - útil para notación rápida en el odontograma
+            $table->text('descripcion')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('categoria_dientes');
+        Schema::dropIfExists('caras_dentales');
     }
 };

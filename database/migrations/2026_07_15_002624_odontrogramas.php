@@ -12,13 +12,10 @@ return new class extends Migration {
     {
         Schema::create('odontogramas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('consulta_id')->constrained('consultas')->cascadeOnDelete();
-
-            // Aquí guardaremos un JSON con el estado de cada diente
-            // Ejemplo: {"11": 1, "12": 2, "13": 5} donde los números corresponden al catálogo (1=Sano, 2=Cariado...)[cite: 1]
-            $table->json('estado_dientes')->nullable(); //[cite: 1]
+            $table->foreignId('paciente_id')->constrained('pacientes')->cascadeOnDelete();
+            $table->foreignId('odontologo_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->date('fecha');
             $table->text('observaciones')->nullable();
-
             $table->timestamps();
         });
     }
