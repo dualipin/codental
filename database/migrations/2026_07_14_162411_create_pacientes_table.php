@@ -12,17 +12,20 @@ return new class extends Migration {
     {
         Schema::create('pacientes', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre'); //
-            $table->date('fecha_nacimiento')->nullable();
-            $table->enum('sexo', ['masculino', 'femenino', 'otro'])->nullable();
+            $table->string('nombre');
+            $table->string('apellido_paterno');
+            $table->string('apellido_materno');
+            $table->string('telefono');
+            $table->date('fecha_nacimiento');
+            $table->enum('sexo', ['masculino', 'femenino', 'otro']);
             $table->string('direccion')->nullable();
             $table->string('estado')->nullable();
             $table->string('municipio')->nullable();
-            $table->string('telefono')->nullable();
             $table->string('ocupacion')->nullable();
             $table->string('estado_civil')->nullable();
             $table->string('correo_electronico')->nullable();
             $table->string('religion')->nullable();
+            $table->boolean('verificado')->default(false);
             $table->timestamps();
         });
     }
