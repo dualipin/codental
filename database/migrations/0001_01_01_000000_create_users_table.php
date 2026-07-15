@@ -20,13 +20,13 @@ return new class extends Migration {
             $table->string('nombre');
             $table->string('apellido_paterno');
             $table->string('apellido_materno');
-            $table->string('sexo');
-            $table->string('especialidad')->nullable();
             $table->date('fecha_nacimiento');
-            $table->string('estado_civil', 20);
-            $table->string('direccion');
-            $table->string('estado');
-            $table->string('municipio');
+            $table->enum('sexo', ['masculino', 'femenino', 'otro']);
+            $table->string('especialidad')->nullable();
+            $table->string('estado_civil', 20)->nullable();
+            $table->string('direccion')->nullable();
+            $table->string('estado')->nullable();
+            $table->string('municipio')->nullable();
             $table->string('telefono', 10);
             $table->string('rol', 10)->default(UserRolEnum::DENTISTA->value);
 
