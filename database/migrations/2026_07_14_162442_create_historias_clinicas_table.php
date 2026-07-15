@@ -22,14 +22,14 @@ return new class extends Migration {
             $table->text('medicacion_actual')->nullable();
             $table->string('nombre_medico')->nullable();
             $table->string('telefono_medico')->nullable();
-            $table->json('enfermedades_previas')->nullable(); // Para los checkboxes[cite: 1]
+            $table->json('enfermedades_previas')->nullable(); // Para los checkboxes
             $table->string('otras_enfermedades_especifique')->nullable();
 
             // Antecedentes No Patológicos (Agrupados en JSON para ahorrar columnas)
-            $table->json('habitos_toxicos')->nullable(); // Tabaco, Alcohol, Drogas[cite: 1]
+            $table->json('habitos_toxicos')->nullable(); // Tabaco, Alcohol, Drogas
             $table->string('grupo_sanguineo')->nullable();
-            $table->json('ginecoobstetricos')->nullable(); // Embarazo, meses de bebe, lactancia[cite: 1]
-            $table->json('estilo_vida')->nullable(); // Deporte, Alimentación, Higiene[cite: 1]
+            $table->json('ginecoobstetricos')->nullable(); // Embarazo, meses de bebe, lactancia
+            $table->json('estilo_vida')->nullable(); // Deporte, Alimentación, Higiene
             $table->text('cirugias_hospitalizaciones')->nullable();
 
             // Exploración y Aparatos
@@ -39,8 +39,8 @@ return new class extends Migration {
 
             // Bucodentales y ATM
             $table->json('antecedentes_bucodentales')->nullable(
-            ); // Ultima visita, cepillado, dolor, sangrado, habitos[cite: 1]
-            $table->json('atm')->nullable(); // Clase Molar, Canina, Overjet, Overbite, chasquidos[cite: 1]
+            ); // Ultima visita, cepillado, dolor, sangrado, habitos
+            $table->json('atm')->nullable(); // Clase Molar, Canina, Overjet, Overbite, chasquidos
             $table->text('tejidos_blandos_duros')->nullable();
 
             $table->timestamps();
