@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,22 +13,18 @@ return new class extends Migration
         Schema::create('consultas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('paciente_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('odontologo_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('cita_id')->nullable()->constrained()->nullOnDelete();
             $table->date('fecha_consulta');
 
-            // Habitus exterior / Signos vitales[cite: 1]
-            $table->string('peso')->nullable();
-            $table->string('estatura')->nullable();
-            $table->string('temperatura')->nullable();
-            $table->string('frecuencia_cardiaca')->nullable();
-            $table->string('frecuencia_respiratoria')->nullable();
-            $table->string('presion_arterial')->nullable();
+            // Habitus exterior / Signos vitales
+            $table->decimal('peso', 8, 2)->nullable();
+            $table->decimal('estatura', 8, 2)->nullable();
+            $table->decimal('temperatura', 5, 2)->nullable();
+            $table->decimal('frecuencia_cardiaca', 5, 2)->nullable();
+            $table->decimal('presion_arterial', 7, 2)->nullable();
 
-            // Evolución[cite: 1]
             $table->text('nota_evolucion')->nullable();
-
-            // Firmas (pueden ser booleanos de confirmación o rutas a una imagen de la firma)
-            $table->boolean('firma_paciente')->default(false);
-            $table->boolean('firma_doctor')->default(false);
 
             $table->timestamps();
         });
