@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TipoSeguimientoOdontogramaEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +15,9 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('paciente_id')->constrained('pacientes')->cascadeOnDelete();
             $table->foreignId('odontologo_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('cita_id')->nullable()->constrained('citas')->nullOnDelete();
             $table->date('fecha');
+            $table->string("tipo_seguimiento")->default(TipoSeguimientoOdontogramaEnum::ALTA->value);
             $table->text('observaciones')->nullable();
             $table->timestamps();
         });

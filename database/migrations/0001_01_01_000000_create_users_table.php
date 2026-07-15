@@ -1,6 +1,6 @@
 <?php
 
-use App\UserRolEnum;
+use App\Enums\UserRolEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->string('apellido_paterno');
             $table->string('apellido_materno');
             $table->string('sexo');
-            $table->string('especialidad');
+            $table->string('especialidad')->nullable();
             $table->date('fecha_nacimiento');
             $table->string('estado_civil', 20);
             $table->string('direccion');
