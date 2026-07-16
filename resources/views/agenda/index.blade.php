@@ -15,7 +15,7 @@
                        class="btn btn-primary btn-lg px-4 mb-2 mb-md-0"><i
                                 class="fa-solid fa-user-plus me-2"></i> Sí, soy paciente nuevo
                     </a>
-                    <a href="{{ route('agendar-cita.identificar-paciente') }}"
+                    <a href="{{ route('agendar-cita.identificar-paciente.show') }}"
                        class="btn btn-outline-secondary btn-lg px-4"><i
                                 class="fa-solid fa-id-card me-2"></i> No, ya estoy registrado
                     </a>
