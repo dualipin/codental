@@ -6,6 +6,6 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        return view('nosotros');
+        return view('welcome');
     }
 }
