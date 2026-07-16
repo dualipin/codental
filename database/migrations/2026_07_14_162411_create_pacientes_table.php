@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('apellido_materno');
             $table->string('telefono')->unique();
             $table->date('fecha_nacimiento');
-            $table->enum('sexo', ['masculino', 'femenino', 'otro']);
+            $table->enum('sexo', ['M', 'F', 'O']);
             $table->string('direccion')->nullable();
             $table->string('estado')->nullable();
             $table->string('municipio')->nullable();

@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->string('apellido_paterno');
             $table->string('apellido_materno');
             $table->date('fecha_nacimiento');
-            $table->enum('sexo', ['masculino', 'femenino', 'otro']);
+            $table->enum('sexo', ['M', 'F', 'O']);
             $table->string('especialidad')->nullable();
             $table->string('estado_civil', 20)->nullable();
             $table->string('direccion')->nullable();

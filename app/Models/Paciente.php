@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\TelephoneCast;
+use App\Enums\SexoEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -30,6 +31,7 @@ class Paciente extends Model
     {
         return [
             'telefono' => TelephoneCast::class,
+            'sexo' => SexoEnum::class
         ];
     }
 }

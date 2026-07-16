@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\SexoEnum;
 use App\Enums\UserRolEnum;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -47,6 +48,7 @@ class User extends Authenticatable
             'fecha_nacimiento' => 'date',
             'password' => 'hashed',
             'rol' => UserRolEnum::class,
+            'sexo' => SexoEnum::class
         ];
     }
 }
