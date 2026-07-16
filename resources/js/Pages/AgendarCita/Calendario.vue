@@ -43,6 +43,7 @@ const form = useForm({
   dentista_id: 0,
   fecha_inicio: '',
   fecha_fin: '',
+  motivo: '',
 })
 
 const citasFiltradas = computed(() => {
@@ -147,6 +148,16 @@ function formatearFecha(iso: string): string {
                 Dr(a). {{ doctor.nombre }} {{ doctor.apellido_paterno }}
               </option>
             </select>
+          </label>
+
+          <label class="form-control max-w-xl">
+            <span class="label-text">Motivo de la cita <span class="text-xs text-base-content/50">(opcional)</span></span>
+            <textarea
+              v-model="form.motivo"
+              class="textarea textarea-bordered h-24 w-full"
+              placeholder="Describe el motivo de tu consulta..."
+              maxlength="500"
+            />
           </label>
 
           <div v-if="dentistaId">

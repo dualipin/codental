@@ -131,6 +131,7 @@ class CitaController extends Controller
             'dentista_id' => ['required', 'exists:users,id'],
             'fecha_inicio' => ['required', 'date', 'after:now'],
             'fecha_fin' => ['required', 'date', 'after:fecha_inicio'],
+            'motivo' => ['nullable', 'string', 'max:500'],
         ]);
 
         $inicio = Carbon::parse($validated['fecha_inicio']);
@@ -154,6 +155,7 @@ class CitaController extends Controller
             'dentista_id' => $validated['dentista_id'],
             'fecha_inicio' => $inicio,
             'fecha_fin' => $fin,
+            'motivo' => $validated['motivo'] ?? null,
             'estatus' => EstatusCitaEnum::PENDIENTE->value,
         ]);
 
