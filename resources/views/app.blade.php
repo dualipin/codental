@@ -3,6 +3,7 @@
 <head>
     <title>{{ config('app.name', 'CoDental') }}</title>
     @include('layouts.partials.head')
+    @routes
     @vite(['resources/css/app.css', 'resources/js/app.ts',  "resources/js/pages/{$page['component']}.vue"])
     @inertiaHead
 
