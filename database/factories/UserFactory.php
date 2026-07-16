@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Enums\SexoEnum;
+use App\Enums\UserRolEnum;
 use App\Models\User;
-use App\UserRolEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -33,7 +34,7 @@ class UserFactory extends Factory
             'nombre' => fake()->firstName(),
             'apellido_paterno' => fake()->lastName(),
             'apellido_materno' => fake()->lastName(),
-            'sexo' => fake()->randomElement(['M', 'F']),
+            'sexo' => fake()->randomElement(SexoEnum::cases()),
             'especialidad' => fake()->randomElement(['General', 'Ortodoncia', 'Endodoncia', 'Cirugía', 'Periodoncia']),
             'fecha_nacimiento' => fake()->date(),
             'estado_civil' => fake()->randomElement(['Soltero(a)', 'Casado(a)', 'Divorciado(a)', 'Viudo(a)']),
