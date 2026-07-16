@@ -11,7 +11,7 @@
                     ¿Es usted un paciente nuevo en la clínica?
                 </p>
                 <div class="d-md-flex justify-content-center gap-3">
-                    <a href="{{ route('agendar-cita.paciente-nuevo') }}"
+                    <a href="{{ route('agendar-cita.paciente-nuevo.show') }}"
                        class="btn btn-primary btn-lg px-4 mb-2 mb-md-0"><i
                                 class="fa-solid fa-user-plus me-2"></i> Sí, soy paciente nuevo
                     </a>
