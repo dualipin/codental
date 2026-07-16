@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRolEnum;
+use App\Models\Paciente;
 use App\Models\User;
-use App\UserRolEnum;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -31,5 +32,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
             'rol' => UserRolEnum::ADMINISTRADOR,
         ]);
+
+        Paciente::factory(10)->create();
     }
 }

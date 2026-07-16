@@ -4,11 +4,16 @@ namespace App\Models;
 
 use App\Casts\TelephoneCast;
 use App\Enums\SexoEnum;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Paciente extends Model
 {
+    /** @uses HasFactory<PacienteFactory> */
+    use HasFactory;
+
+
     protected $table = 'pacientes';
     protected $guarded = [];
 
