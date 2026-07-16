@@ -11,7 +11,7 @@
                     <h2 class="text-2xl font-bold text-base-content">Verificar Mis Datos</h2>
                 </div>
 
-                <form action="{{ route('agendar-cita.verificar-paciente') }}" method="POST" class="space-y-6">
+                <form action="{{ route('agendar-cita.identificar-paciente') }}" method="POST" class="space-y-6">
                     @csrf
                     <!-- Teléfono -->
                     <div class="form-control w-full">
