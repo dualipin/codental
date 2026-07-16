@@ -8,7 +8,7 @@
             </a>
         </div>
         <div class="flex-none">
-            <a href="{{ route('login') }}" class="btn btn-outline btn-primary">
+            <a href="{{ route('login.show') }}" class="btn btn-outline btn-primary">
                 <i class="fa-solid fa-user-lock"></i> Iniciar Sesión
             </a>
         </div>
@@ -64,7 +64,7 @@
                 <h2 class="text-5xl font-bold mb-6 font-display">¿Listo para
                     transformar tu sonrisa?</h2>
                 <p class="text-lg mb-8">Reserva tu espacio hoy mismo con nuestros especialistas.</p>
-                <a href="{{ route('agenda.identificacion') }}" class="btn btn-lg btn-primary gap-2">
+                <a href="{{ route('agendar-cita') }}" class="btn btn-lg btn-primary gap-2">
                     <i class="fa-solid fa-calendar-check"></i> Agendar Cita Ahora
                 </a>
             </div>
