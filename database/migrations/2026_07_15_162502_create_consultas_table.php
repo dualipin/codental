@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         Schema::create('consultas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('paciente_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('odontologo_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('cita_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('paciente_id')->constrained('pacientes')->cascadeOnDelete();
+            $table->foreignId('odontologo_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('cita_id')->nullable()->constrained('citas')->nullOnDelete();
             $table->date('fecha_consulta');
 
             // Habitus exterior / Signos vitales
