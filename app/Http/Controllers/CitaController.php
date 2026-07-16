@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Enums\EstatusCitaEnum;
+use App\Enums\UserRolEnum;
 use App\Models\Cita;
-use App\UserRolEnum;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
 use App\Models\Paciente;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
+
+use function asset;
+use function back;
+use function redirect;
+use function route;
+use function session;
 
 
 class CitaController extends Controller
@@ -17,156 +23,140 @@ class CitaController extends Controller
 
     public function index()
     {
-        return Inertia::render('AgendarCitaPage');
+        return view('agenda.index');
     }
 
-    // Carga la primera vista (Modal / Selección)
-    public function pantallaIdentificacion()
+    public function registrarPacienteShow()
     {
-        $doctores = User::all()->where('rol', UserRolEnum::DENTISTA->value);
+        $doctores = User::query()
+            ->whereIn('rol', [UserRolEnum::DENTISTA->value, UserRolEnum::ADMINISTRADOR->value])
+            ->orderBy('nombre')
+            ->get([
+                'id',
+                'nombre',
+                'apellido_paterno',
+                'especialidad',
+                'foto_usuario',
+            ])
+            ->map(function ($doctor) {
+                $doctor->foto_usuario = $doctor->foto_usuario
+                    ? asset('storage/' . $doctor->foto_usuario)
+                    : null;
 
-        // Pasamos la variable a la vista de identificación
-        return view('agenda.identificacion', compact('doctores'));
-    }
+                return $doctor;
+            });
 
-    // Verifica si el paciente ya existe por Nombre, Apellidos y Teléfono
-    public function verificarPaciente(Request $request)
-    {
-        $request->validate([
-            'pnom' => 'required|string',
-            'papp' => 'required|string',
-            'papm' => 'required|string',
-            'ptel' => 'required|string|max:10',
-        ]);
-
-        // Buscamos coincidencia exacta en la base de datos
-        $paciente = Paciente::where('pnom', $request->pnom)
-            ->where('papp', $request->papp)
-            ->where('papm', $request->papm)
-            ->where('ptel', $request->ptel)
-            ->first();
-
-        if (!$paciente) {
-            return back()->withErrors(
-                ['error_paciente' => 'No se encontró ningún registro con los datos proporcionados.']
-            );
-        }
-
-        // Si existe, guardamos su ID en la sesión segura del servidor
-        session(['agenda_id_paciente' => $paciente->idp]);
-
-        return redirect()->route('agenda.calendario');
-    }
-
-    // Carga la segunda vista (El Calendario con los datos automáticos)
-    public function pantallaAgenda()
-    {
-        // Seguridad: Si no hay ID en la sesión, lo regresa al paso 1
-        if (!session()->has('agenda_id_paciente')) {
-            return redirect()->route('agenda.identificacion');
-        }
-
-        // Recuperamos el ID de la sesión y buscamos al paciente con su doctor asignado
-        $idPaciente = session('agenda_id_paciente');
-        $paciente = Paciente::findOrFail($idPaciente);
-
-        // Obtenemos el doctor asignado directamente de la ficha del paciente
-        $doctorAsignado = Usuario::where('user', $paciente->d_user)->first();
-
-        // Cargar todos los eventos del doctor seleccionado para FullCalendar
-        $citasRaw = Cita::with(['paciente'])
-            ->where('d_user', $doctorAsignado?->user ?? $paciente->d_user)
-            ->orderBy('fec_i')
-            ->get();
-
-        $eventos = $citasRaw->map(function ($cita) {
-            $estado = strtolower(trim((string)$cita->est));
-
-            if (in_array($estado, ['aceptada', 'aceptado', 'confirmada', 'confirmado'], true)) {
-                $color = '#16a34a';
-                $estadoTexto = 'Aceptada';
-            } elseif (in_array($estado, ['pendiente', 'pendiente de confirmar'], true)) {
-                $color = '#dc2626';
-                $estadoTexto = 'Pendiente';
-            } else {
-                $color = '#64748b';
-                $estadoTexto = ucfirst($estado ?: 'Sin estado');
-            }
-
-            $pacienteNombre = trim(
-                ($cita->paciente->pnom ?? '') . ' ' . ($cita->paciente->papp ?? '') . ' ' . ($cita->paciente->papm ?? '')
-            );
-
-            return [
-                'title' => $pacienteNombre !== '' ? $pacienteNombre : 'Cita agendada',
-                'start' => Carbon::parse($cita->fec_i)->toIso8601String(),
-                'end' => Carbon::parse($cita->fec_f)->toIso8601String(),
-                'allDay' => false,
-                'color' => $color,
-                'backgroundColor' => $color,
-                'borderColor' => $color,
-                'textColor' => '#ffffff',
-                'extendedProps' => [
-                    'estado' => $estado,
-                    'estadoTexto' => $estadoTexto,
-                    'doctorName' => 'Dr(a). ' . trim(
-                            ($doctorAsignado?->nom ?? '') . ' ' . ($doctorAsignado?->app ?? '')
-                        ),
-                    'paciente' => $pacienteNombre,
-                    'doctorId' => $cita->d_user,
-                ],
-            ];
-        });
-
-        return view('agenda.calendario', [
-            'paciente' => $paciente,
-            'doctor' => $doctorAsignado,
-            'eventosJson' => $eventos->toJson(),
+        return Inertia::render('AgendarCita/RegistrarPaciente', [
+            'doctores' => $doctores,
+            'formulario_publico' => true
         ]);
     }
 
-    // Procesa el guardado final de la cita
-    public function storeDesdePaciente(Request $request)
+    public function identificarPacienteShow()
     {
-        if (!session()->has('agenda_id_paciente')) {
-            return redirect()->route('agenda.identificacion');
-        }
+        return view('agenda.identificar-paciente');
+    }
 
-        $idPaciente = session('agenda_id_paciente');
-        $paciente = Paciente::findOrFail($idPaciente);
-
-        $request->validate([
-            'fec' => 'required|date',
-            'hor' => 'required'
+    public function identificarPaciente(Request $request)
+    {
+        $validated = $request->validate([
+            'telefono' => 'required|string|max:10',
         ]);
 
-        $inicio = Carbon::parse($request->fec . ' ' . $request->hor);
-        $fin = $inicio->copy()->addHour();
+        $pacienteId = Paciente::where('telefono', $validated['telefono'])->first()->id;
 
-        // Verificar cruces de última hora
-        $yaExiste = Cita::where('d_user', $paciente->d_user)
+        if (!$pacienteId) {
+            return back()->withErrors([
+                'paciente_no_encontrado' => 'No se encontró un paciente con ese número de teléfono.'
+            ]);
+        }
+
+        session(['paciente_id' => $pacienteId]);
+
+        return redirect()->route('agendar-cita.calendario.show');
+    }
+
+    public function calendarioShow()
+    {
+        $pacienteId = session('paciente_id');
+
+        $doctores = User::query()
+            ->whereIn('rol', [UserRolEnum::DENTISTA->value, UserRolEnum::ADMINISTRADOR->value])
+            ->orderBy('nombre')
+            ->get([
+                'id',
+                'nombre',
+                'apellido_paterno',
+                'apellido_materno',
+                'especialidad',
+                'foto_usuario',
+            ])
+            ->map(function ($doctor) {
+                $doctor->foto_usuario = $doctor->foto_usuario
+                    ? asset('storage/' . $doctor->foto_usuario)
+                    : null;
+
+                return $doctor;
+            });
+
+        $citas = Cita::with('dentista')
+            ->where('fecha_inicio', '>=', Carbon::now()->startOfWeek(Carbon::MONDAY))
+            ->get()
+            ->map(function (Cita $cita) {
+                return [
+                    'id' => $cita->id,
+                    'title' => 'Ocupado',
+                    'start' => $cita->fecha_inicio->toIso8601String(),
+                    'end' => $cita->fecha_fin->toIso8601String(),
+                    'backgroundColor' => '#f87171',
+                    'borderColor' => '#ef4444',
+                    'display' => 'block',
+                    'extendedProps' => [
+                        'dentista_id' => $cita->dentista_id,
+                    ],
+                ];
+            });
+
+        return Inertia::render('AgendarCita/Calendario', [
+            'paciente_id' => $pacienteId,
+            'doctores' => $doctores,
+            'citas' => $citas,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'paciente_id' => ['required', 'exists:pacientes,id'],
+            'dentista_id' => ['required', 'exists:users,id'],
+            'fecha_inicio' => ['required', 'date', 'after:now'],
+            'fecha_fin' => ['required', 'date', 'after:fecha_inicio'],
+        ]);
+
+        $inicio = Carbon::parse($validated['fecha_inicio']);
+        $fin = Carbon::parse($validated['fecha_fin']);
+
+        $cruce = Cita::where('dentista_id', $validated['dentista_id'])
             ->where(function ($query) use ($inicio, $fin) {
-                $query->where('fec_i', '<', $fin)->where('fec_f', '>', $inicio);
-            })->exists();
+                $query->where('fecha_inicio', '<', $fin)
+                    ->where('fecha_fin', '>', $inicio);
+            })
+            ->exists();
 
-        if ($yaExiste) {
-            return back()->withErrors(['hor' => 'Este horario se acaba de ocupar. Elige otro.']);
+        if ($cruce) {
+            return back()->withErrors([
+                'horario' => 'Ese horario ya está ocupado para el dentista seleccionado.',
+            ]);
         }
 
         Cita::create([
-            'idc' => (string)Str::uuid(),
-            'idp' => $paciente->idp, // ID seguro desde la base de datos
-            'fec_i' => $inicio,
-            'fec_f' => $fin,
-            'd_user' => $paciente->d_user, // Doctor asignado automáticamente
-            'est' => 'pendiente'
+            'paciente_id' => $validated['paciente_id'],
+            'dentista_id' => $validated['dentista_id'],
+            'fecha_inicio' => $inicio,
+            'fecha_fin' => $fin,
+            'estatus' => EstatusCitaEnum::PENDIENTE->value,
         ]);
 
-        // Limpiamos la sesión para que el proceso termine correctamente
-        session()->forget('agenda_id_paciente');
-
-        return redirect()->route('agenda.identificacion')->with('success', '¡Cita agendada con éxito!');
+        return Inertia::location(route('index'));
     }
-
-
 }

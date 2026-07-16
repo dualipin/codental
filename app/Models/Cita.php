@@ -34,6 +34,8 @@ class Cita extends Model
     protected function casts(): array
     {
         return [
+            'fecha_inicio' => 'datetime',
+            'fecha_fin' => 'datetime',
             'estatus' => EstatusCitaEnum::class,
         ];
     }
