@@ -9,6 +9,14 @@ import {
   type RegistrarPacienteWizardPayload,
 } from '@/types/RegistrarPacienteWizard'
 
+const camposRequeridos: Record<number, Array<keyof RegistrarPacienteWizardForm>> = {
+  1: ['nombre', 'apellidoPaterno', 'fechaNacimiento', 'sexo', 'telefono'],
+  2: ['antecedentesHereditarios'],
+  3: [],
+  4: [],
+  5: ['usuarioAsignado'],
+}
+
 export const opcionesEnfermedad: OpcionEnfermedad[] = [
   { key: 'diabetes', label: 'Diabetes' },
   { key: 'vih', label: 'VIH' },
@@ -415,6 +423,16 @@ export function useRegistrarPacienteWizard(props: { doctores: Doctor[]; formular
       .filter((error): error is string => Boolean(error))
   }
 
+  const pasoActualValido = computed(() => {
+    const campos = camposRequeridos[pasoActual.value] ?? []
+    if (campos.length === 0) return true
+    return campos.every((campo) => {
+      const valor = formulario[campo]
+      if (typeof valor === 'string') return valor.trim() !== ''
+      return valor != null
+    })
+  })
+
   function siguientePaso() {
     if (pasoActual.value < totalPasos.value) {
       pasoActual.value += 1
@@ -457,6 +475,7 @@ export function useRegistrarPacienteWizard(props: { doctores: Doctor[]; formular
     opcionesEnfermedad,
     doctorSeleccionado,
     getErroresPaso,
+    pasoActualValido,
     siguientePaso,
     anteriorPaso,
     enviarFormulario,
