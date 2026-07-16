@@ -28,7 +28,14 @@ const hayConsumo = computed(
 
       <label v-if="hayConsumo" class="form-control md:col-span-2">
         <span class="label-text">Frecuencia de consumo</span>
-        <input v-model="form.frecuenciaConsumo" type="text" class="input input-bordered w-full" maxlength="15" placeholder="Ej. Diario, semanal" />
+        <select v-model="form.frecuenciaConsumo" class="select select-bordered w-full">
+          <option value="" disabled>Seleccione una opción</option>
+          <option value="Diario">Diario</option>
+          <option value="Semanal">Semanal</option>
+          <option value="Quincenal">Quincenal</option>
+          <option value="Mensual">Mensual</option>
+          <option value="Ocasional">Ocasional</option>
+        </select>
       </label>
       <label class="form-control">
         <span class="label-text">Grupo sanguíneo</span>

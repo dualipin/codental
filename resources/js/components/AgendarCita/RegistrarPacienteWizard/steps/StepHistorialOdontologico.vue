@@ -14,7 +14,14 @@ const { form } = defineProps<{
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
       <label class="form-control">
         <span class="label-text">Última revisión odontológica</span>
-        <input v-model="form.ultimaRevisionDental" type="text" class="input input-bordered w-full" maxlength="10" placeholder="Ej. Hace 6 meses" />
+        <select v-model="form.ultimaRevisionDental" class="select select-bordered w-full">
+          <option value="" disabled>Seleccione una opción</option>
+          <option value="Menos de 6 meses">Menos de 6 meses</option>
+          <option value="6 a 12 meses">6 a 12 meses</option>
+          <option value="1 a 2 años">1 a 2 años</option>
+          <option value="Más de 2 años">Más de 2 años</option>
+          <option value="Nunca">Nunca</option>
+        </select>
       </label>
       <label class="form-control">
         <span class="label-text">Motivo de la última visita dental</span>
@@ -35,7 +42,14 @@ const { form } = defineProps<{
 
       <label class="form-control md:col-span-2">
         <span class="label-text">Frecuencia y tiempo de cepillado</span>
-        <input v-model="form.frecuenciaCepillado" type="text" class="input input-bordered w-full" maxlength="25" placeholder="Ej. 3 veces al día, 2 min" />
+        <select v-model="form.frecuenciaCepillado" class="select select-bordered w-full">
+          <option value="" disabled>Seleccione una opción</option>
+          <option value="1 vez al día">1 vez al día</option>
+          <option value="2 veces al día">2 veces al día</option>
+          <option value="3 veces al día">3 veces al día</option>
+          <option value="Después de cada comida">Después de cada comida</option>
+          <option value="Ocasionalmente">Ocasionalmente</option>
+        </select>
       </label>
 
       <label class="form-control">

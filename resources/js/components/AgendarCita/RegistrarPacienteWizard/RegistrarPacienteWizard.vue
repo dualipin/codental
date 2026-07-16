@@ -21,6 +21,7 @@ const {
   opcionesEnfermedad,
   doctorSeleccionado,
   getErroresPaso,
+  pasoActualValido,
   siguientePaso,
   anteriorPaso,
   enviarFormulario,
@@ -100,7 +101,7 @@ function etiquetaPaso(paso: unknown, indice: number): string {
               </button>
               <div class="flex items-center gap-2">
                 <span class="text-sm text-base-content/70">Paso {{ pasoActual }} de {{ totalPasos }}</span>
-                <button v-if="pasoActual < totalPasos" type="button" class="btn btn-primary" @click="siguientePaso">
+                <button v-if="pasoActual < totalPasos" type="button" class="btn btn-primary" @click="siguientePaso" :disabled="!pasoActualValido">
                   Siguiente
                 </button>
                 <button v-else type="submit" class="btn btn-success" :disabled="formulario.processing">

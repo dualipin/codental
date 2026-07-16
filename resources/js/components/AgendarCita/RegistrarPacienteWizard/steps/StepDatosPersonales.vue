@@ -40,12 +40,27 @@ const { form } = defineProps<{
       </label>
       <label class="form-control">
         <span class="label-text">Ocupación</span>
-        <input v-model="form.ocupacion" type="text" class="input input-bordered w-full" maxlength="10" placeholder="Ej. Ingeniero"/>
+        <select v-model="form.ocupacion" class="select select-bordered w-full">
+          <option value="" disabled>Seleccione una opción</option>
+          <option value="Empleado(a)">Empleado(a)</option>
+          <option value="Profesionista">Profesionista</option>
+          <option value="Comerciante">Comerciante</option>
+          <option value="Estudiante">Estudiante</option>
+          <option value="Jubilado(a)">Jubilado(a)</option>
+          <option value="Hogar">Hogar</option>
+          <option value="Desempleado(a)">Desempleado(a)</option>
+        </select>
       </label>
 
       <label class="form-control">
         <span class="label-text">Estado civil</span>
-        <input v-model="form.estadoCivil" type="text" class="input input-bordered w-full" maxlength="15" placeholder="Ej. Soltero/a"/>
+        <select v-model="form.estadoCivil" class="select select-bordered w-full">
+          <option value="">Seleccione una opción</option>
+          <option value="Soltero(a)">Soltero(a)</option>
+          <option value="Casado(a)">Casado(a)</option>
+          <option value="Divorciado(a)">Divorciado(a)</option>
+          <option value="Viudo(a)">Viudo(a)</option>
+        </select>
       </label>
       <label class="form-control">
         <span class="label-text">Teléfono *</span>
@@ -72,7 +87,16 @@ const { form } = defineProps<{
 
       <label class="form-control">
         <span class="label-text">Religión</span>
-        <input v-model="form.religion" type="text" class="input input-bordered w-full" maxlength="255" placeholder="Ej. Católica"/>
+        <select v-model="form.religion" class="select select-bordered w-full">
+          <option value="" disabled>Seleccione una opción</option>
+          <option value="Católica">Católica</option>
+          <option value="Cristiana">Cristiana</option>
+          <option value="Evangélica">Evangélica</option>
+          <option value="Testigo de Jehová">Testigo de Jehová</option>
+          <option value="Mormona">Mormona</option>
+          <option value="Otra">Otra</option>
+          <option value="Ninguna">Ninguna</option>
+        </select>
       </label>
     </div>
   </section>
