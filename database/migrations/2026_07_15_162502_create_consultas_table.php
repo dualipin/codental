@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->date('fecha_consulta');
 
             // Habitus exterior / Signos vitales
+            $table->text('motivo_consulta')->nullable();
             $table->decimal('peso', 8, 2)->nullable();
             $table->decimal('estatura', 8, 2)->nullable();
             $table->decimal('temperatura', 5, 2)->nullable();

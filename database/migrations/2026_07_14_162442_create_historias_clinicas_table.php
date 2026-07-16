@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('paciente_id')->constrained()->cascadeOnDelete();
 
-            $table->text('motivo_consulta')->nullable();
             $table->text('antecedentes_hereditarios')->nullable();
 
             // Antecedentes Patológicos (Integrando lo que vimos antes)
@@ -23,7 +22,7 @@ return new class extends Migration {
             $table->string('nombre_medico')->nullable();
             $table->string('telefono_medico')->nullable();
             $table->json('enfermedades_previas')->nullable(); // Para los checkboxes
-            $table->string('otras_enfermedades_especifique')->nullable();
+            $table->string('otras_enfermedades')->nullable();
 
             // Antecedentes No Patológicos (Agrupados en JSON para ahorrar columnas)
             $table->json('habitos_toxicos')->nullable(); // Tabaco, Alcohol, Drogas

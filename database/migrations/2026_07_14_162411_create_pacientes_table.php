@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('nombre');
             $table->string('apellido_paterno');
-            $table->string('apellido_materno');
+            $table->string('apellido_materno')->nullable();
             $table->string('telefono')->unique();
             $table->date('fecha_nacimiento');
             $table->enum('sexo', ['M', 'F', 'O']);
