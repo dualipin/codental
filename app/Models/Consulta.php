@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Consulta extends Model
 {
+    protected $table = 'consultas';
     protected $guarded = [];
 
     public function paciente(): BelongsTo

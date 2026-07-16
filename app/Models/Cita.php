@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Cita extends Model
 {
+    protected $table = 'citas';
     protected $guarded = [];
 
     public function paciente(): BelongsTo

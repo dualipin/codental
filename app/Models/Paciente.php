@@ -7,6 +7,7 @@ use App\Enums\SexoEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Paciente extends Model
 {
@@ -30,6 +31,11 @@ class Paciente extends Model
     public function presupuestos(): HasMany
     {
         return $this->hasMany(Presupuesto::class, 'paciente_id');
+    }
+
+    public function historiaClinica(): HasOne
+    {
+        return $this->hasOne(HistoriaClinica::class, 'paciente_id');
     }
 
     protected function casts(): array
