@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\EstatusCitaEnum;
 use App\Enums\UserRolEnum;
 use App\Models\Cita;
+use App\Models\Paciente;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ use function view;
 
 class AgendaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $usuario = auth()->user();
 
@@ -85,12 +86,89 @@ class AgendaController extends Controller
                 ]);
         }
 
+        if ($rolUsuario === UserRolEnum::DENTISTA->value) {
+            $doctores = collect([
+                [
+                    'id' => $usuario->id,
+                    'nombre' => $usuario->nombre,
+                    'apellido_paterno' => $usuario->apellido_paterno,
+                    'apellido_materno' => $usuario->apellido_materno,
+                ],
+            ]);
+        }
+
+        $pacientes = Paciente::query()
+            ->orderBy('nombre')
+            ->orderBy('apellido_paterno')
+            ->get(['id', 'nombre', 'apellido_paterno', 'apellido_materno', 'telefono']);
+
+        $pacienteSeleccionadoId = $request->integer('paciente') ?? session('paciente_id');
+        $pacienteSeleccionado = $pacienteSeleccionadoId
+            ? Paciente::query()->find($pacienteSeleccionadoId, ['id', 'nombre', 'apellido_paterno', 'apellido_materno', 'telefono'])
+            : null;
+
         return Inertia::render('Agenda/Calendario', [
             'rolUsuario' => $rolUsuario,
             'usuarioId' => $usuario->id,
             'citas' => $citas,
             'doctores' => $doctores,
+            'pacientes' => $pacientes,
+            'pacienteSeleccionado' => $pacienteSeleccionado,
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $usuario = auth()->user();
+
+        if (! $usuario) {
+            return redirect()->route('login.show');
+        }
+
+        $rolUsuario = $usuario->rol instanceof UserRolEnum
+            ? $usuario->rol->value
+            : (string) $usuario->rol;
+
+        $validated = $request->validate([
+            'paciente_id' => ['required', 'exists:pacientes,id'],
+            'dentista_id' => ['required', 'exists:users,id'],
+            'fecha_inicio' => ['required', 'date', 'after:now'],
+            'fecha_fin' => ['required', 'date', 'after:fecha_inicio'],
+            'motivo' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        if ($rolUsuario === UserRolEnum::DENTISTA->value && (int) $validated['dentista_id'] !== $usuario->id) {
+            return back()->withErrors([
+                'dentista_id' => 'Solo puedes agendar citas para ti mismo.',
+            ]);
+        }
+
+        $inicio = Carbon::parse($validated['fecha_inicio']);
+        $fin = Carbon::parse($validated['fecha_fin']);
+
+        $cruce = Cita::where('dentista_id', $validated['dentista_id'])
+            ->where(function ($query) use ($inicio, $fin) {
+                $query->where('fecha_inicio', '<', $fin)
+                    ->where('fecha_fin', '>', $inicio);
+            })
+            ->exists();
+
+        if ($cruce) {
+            return back()->withErrors([
+                'horario' => 'Ese horario ya está ocupado para el dentista seleccionado.',
+            ]);
+        }
+
+        $cita = Cita::create([
+            'paciente_id' => $validated['paciente_id'],
+            'dentista_id' => $validated['dentista_id'],
+            'fecha_inicio' => $inicio,
+            'fecha_fin' => $fin,
+            'motivo' => $validated['motivo'] ?? null,
+            'estatus' => EstatusCitaEnum::PENDIENTE->value,
+        ]);
+
+        return redirect()->route('agenda.citas.confirmar', ['cita' => $cita->id]);
     }
 
     public function confirmar(Cita $cita)
@@ -99,7 +177,7 @@ class AgendaController extends Controller
             'paciente.historiaClinica',
             'paciente.citas' => fn ($query) => $query->with('dentista')->latest('fecha_inicio'),
             'paciente.consultas' => fn ($query) => $query->with('odontologo')->latest('fecha_consulta'),
-            'paciente.presupuestos' => fn ($query) => $query->with('dentista', 'abonos')->latest('fecha_emision'),
+            'paciente.presupuestos' => fn ($query) => $query->with(['dentista', 'detalles.distribuciones'])->latest('fecha_emision'),
             'dentista',
         ]);
 

@@ -156,15 +156,15 @@ class CitaController extends Controller
             'telefono' => 'required|string|max:10',
         ]);
 
-        $pacienteId = Paciente::where('telefono', $validated['telefono'])->first()->id;
+        $paciente = Paciente::where('telefono', $validated['telefono'])->first();
 
-        if (!$pacienteId) {
+        if (! $paciente) {
             return back()->withErrors([
                 'paciente_no_encontrado' => 'No se encontró un paciente con ese número de teléfono.'
             ]);
         }
 
-        session(['paciente_id' => $pacienteId]);
+        session(['paciente_id' => $paciente->id]);
 
         return redirect()->route('agendar-cita.calendario.show');
     }

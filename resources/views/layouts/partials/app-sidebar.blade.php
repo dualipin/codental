@@ -109,14 +109,6 @@
                                     Facturación / Abonos
                                 </a>
                             </li>
-                            @if($esRecep)
-                                <li>
-                                    <a href="{{ route('caja.facturacion') }}">
-                                        <i class="bi bi-plus-circle-fill"></i>
-                                        Registrar Pago
-                                    </a>
-                                </li>
-                            @endif
                         </ul>
                     </details>
                 </li>

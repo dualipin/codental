@@ -150,7 +150,7 @@ class PacienteController extends Controller
             'historiaClinica',
             'citas' => fn ($q) => $q->with('dentista')->latest('fecha_inicio'),
             'consultas' => fn ($q) => $q->with('odontologo')->latest('fecha_consulta'),
-            'presupuestos' => fn ($q) => $q->with('dentista', 'abonos')->latest('fecha_emision'),
+            'presupuestos' => fn ($q) => $q->with(['dentista', 'detalles.distribuciones'])->latest('fecha_emision'),
         ]);
 
         return view('app.pacientes.show', ['paciente' => $paciente]);

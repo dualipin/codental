@@ -15,8 +15,41 @@ class CajaService
     public function registrarPago(int $pacienteId, int $usuarioId, float $monto, string $metodoPago, ?string $referenciaBancaria, array $distribucion): MovimientoCaja
     {
         return DB::transaction(function () use ($pacienteId, $usuarioId, $monto, $metodoPago, $referenciaBancaria, $distribucion) {
-            
-            // 1. Crear el movimiento (ingreso)
+            $saldoActual = $this->calcularSaldoPaciente($pacienteId);
+
+            if ($monto > $saldoActual) {
+                throw new \InvalidArgumentException('El pago no puede exceder el saldo pendiente del paciente.');
+            }
+
+            if ($distribucion === []) {
+                throw new \InvalidArgumentException('Debes distribuir el pago en al menos un tratamiento.');
+            }
+
+            $sumaDistribucion = 0;
+            foreach ($distribucion as $item) {
+                $sumaDistribucion += abs((float) ($item['monto_aplicado'] ?? 0));
+            }
+
+            if (round($sumaDistribucion, 2) !== round($monto, 2)) {
+                throw new \InvalidArgumentException('La distribución del abono no coincide con el monto total del pago.');
+            }
+
+            foreach ($distribucion as $item) {
+                $detalle = PresupuestoDetalle::with('presupuesto')->findOrFail($item['presupuesto_detalle_id']);
+
+                if ((int) $detalle->presupuesto->paciente_id !== $pacienteId) {
+                    throw new \InvalidArgumentException('La distribución contiene tratamientos de otro paciente.');
+                }
+
+                $montoAplicado = abs((float) $item['monto_aplicado']);
+                $yaAplicado = (float) $detalle->distribuciones()->sum('monto_aplicado');
+                $restante = (float) ($detalle->precio_congelado - $detalle->monto_descuento - $yaAplicado);
+
+                if ($montoAplicado > $restante) {
+                    throw new \InvalidArgumentException('El monto aplicado excede el saldo pendiente del tratamiento.');
+                }
+            }
+
             $movimiento = MovimientoCaja::create([
                 'paciente_id' => $pacienteId,
                 'tipo_movimiento' => 'ingreso',
@@ -26,8 +59,6 @@ class CajaService
                 'usuario_id' => $usuarioId,
             ]);
 
-            // 2. Distribuir el abono
-            $sumaDistribucion = 0;
             foreach ($distribucion as $item) {
                 $detalleId = $item['presupuesto_detalle_id'];
                 $montoAplicado = abs($item['monto_aplicado']);
@@ -37,12 +68,6 @@ class CajaService
                     'presupuesto_detalle_id' => $detalleId,
                     'monto_aplicado' => $montoAplicado,
                 ]);
-
-                $sumaDistribucion += $montoAplicado;
-            }
-
-            if (round($sumaDistribucion, 2) !== round($monto, 2)) {
-                throw new \InvalidArgumentException('La distribución del abono no coincide con el monto total del pago.');
             }
 
             return $movimiento;

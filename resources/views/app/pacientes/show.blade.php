@@ -13,6 +13,7 @@
     <div class="flex items-center justify-between mb-4">
         <h1 class="text-2xl font-bold">{{ $paciente->nombre }} {{ $paciente->apellido_paterno }}</h1>
         <div class="flex gap-2">
+            <a href="{{ route('agenda', ['paciente' => $paciente->id]) }}" class="btn btn-primary">Agendar cita</a>
             @if ($puedeEditarAntecedentesMedicos)
                 <a href="{{ route('pacientes.historia-clinica.edit', $paciente) }}" class="btn btn-primary">Editar historia clínica</a>
             @endif
@@ -233,7 +234,7 @@
                                         @endswitch
                                     </td>
                                     <td>{{ $presupuesto->dentista?->nombre ?? '—' }}</td>
-                                    <td>${{ number_format($presupuesto->abonos->sum('monto'), 2) }}</td>
+                                    <td>${{ number_format($presupuesto->distribuciones->sum('monto_aplicado'), 2) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

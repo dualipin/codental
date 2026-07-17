@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PresupuestoDetalle extends Model
 {
@@ -26,5 +27,10 @@ class PresupuestoDetalle extends Model
     public function tratamientoCatalogo(): BelongsTo
     {
         return $this->belongsTo(TratamientoCatalogo::class);
+    }
+
+    public function distribuciones(): HasMany
+    {
+        return $this->hasMany(AbonoDistribucion::class, 'presupuesto_detalle_id');
     }
 }

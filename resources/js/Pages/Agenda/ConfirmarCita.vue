@@ -56,6 +56,21 @@ const nombreCompleto = computed(() => [
   props.cita.paciente.apellido_materno,
 ].filter(Boolean).join(' '))
 
+const whatsappLink = computed(() => {
+  const telefono = String(props.cita.paciente.telefono ?? '').replace(/\D/g, '')
+
+  if (!telefono) {
+    return ''
+  }
+
+  const telefonoConPrefijo = telefono.length === 10 ? `52${telefono}` : telefono
+  const mensaje = encodeURIComponent(
+    `Hola ${nombreCompleto.value}, le contactamos de la clínica para dar seguimiento a su cita agendada el ${formatearFecha(props.cita.fecha_inicio)}.`,
+  )
+
+  return `https://wa.me/${telefonoConPrefijo}?text=${mensaje}`
+})
+
 function formatearFecha(iso: string): string {
   return new Date(iso).toLocaleString('es-MX', {
     weekday: 'long',
@@ -101,6 +116,15 @@ function cancelar() {
         <div class="flex gap-2">
           <button class="btn btn-success" :disabled="processing" @click="confirmar">Confirmar</button>
           <button class="btn btn-error" :disabled="processing" @click="cancelar">Cancelar</button>
+          <a
+            v-if="whatsappLink"
+            :href="whatsappLink"
+            target="_blank"
+            rel="noreferrer"
+            class="btn btn-primary"
+          >
+            WhatsApp
+          </a>
           <a :href="route('pacientes.show', {paciente: props.cita.paciente.id})" class="btn btn-ghost">Ver expediente</a>
         </div>
       </div>
@@ -170,8 +194,18 @@ function cancelar() {
             <div class="rounded-box border border-base-300 p-4">
               <div class="flex items-center justify-between gap-2">
                 <p class="text-sm text-base-content/50">Acciones</p>
-                <a :href="route('pacientes.show', {paciente: props.cita.paciente.id})" class="btn btn-ghost btn-sm">Abrir
-                  expediente completo</a>
+                <div class="flex flex-wrap gap-2">
+                  <a
+                    v-if="whatsappLink"
+                    :href="whatsappLink"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="btn btn-primary btn-sm"
+                  >
+                    Enviar WhatsApp
+                  </a>
+                  <a :href="route('pacientes.show', {paciente: props.cita.paciente.id})" class="btn btn-ghost btn-sm">Abrir expediente completo</a>
+                </div>
               </div>
               <p class="mt-2 text-sm text-base-content/70">Desde aquí puedes confirmar o cancelar la cita y revisar la
                 información básica antes de entrar a la consulta.</p>

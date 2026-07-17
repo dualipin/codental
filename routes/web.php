@@ -12,6 +12,7 @@ use App\Http\Controllers\OdontogramaController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Middleware\CheckFinancialAccess;
 use App\Http\Middleware\InertiaAgendaMiddleware;
 use App\Http\Middleware\InertiaAppMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,7 @@ Route::prefix('agendar-cita')->controller(CitaController::class)->group(function
 Route::middleware(['auth.personalizado'])->prefix('app')->group(function () {
     Route::prefix('agenda')->controller(AgendaController::class)->group(function () {
         Route::get('/', 'index')->name('agenda');
+        Route::post('/citas', 'store')->name('agenda.citas.store');
         Route::get('/cita/{cita}', 'confirmar')->name('agenda.citas.confirmar');
         Route::patch('/cita/{cita}/confirmar', 'confirmarCita')->name('agenda.citas.confirmar.update');
         Route::patch('/cita/{cita}/cancelar', 'cancelarCita')->name('agenda.citas.cancelar');
@@ -85,11 +87,12 @@ Route::middleware(['auth.personalizado'])->prefix('app')->group(function () {
     Route::post('/pacientes/{paciente}/odontograma', [OdontogramaController::class, 'guardar'])
         ->name('pacientes.odontograma.guardar');
 
-    Route::prefix('caja')->controller(FacturacionController::class)->group(function () {
+    Route::middleware(CheckFinancialAccess::class)->prefix('caja')->controller(FacturacionController::class)->group(function () {
         Route::get('/facturacion', 'index')->name('caja.facturacion');
+        Route::get('/facturacion/buscar-pacientes', 'buscarPacientes')->name('caja.facturacion.buscar-pacientes');
         Route::post('/facturacion/abonos', 'registrarAbono')->name('caja.abonos.store');
-        Route::put('/facturacion/abonos/{abono}', 'actualizarAbono')->name('caja.abonos.update');
-        Route::post('/facturacion/abonos/{abono}/anular', 'anularAbono')->name('caja.abonos.anular');
+        Route::post('/facturacion/abonos/{movimiento}/anular', 'anularAbono')->name('caja.abonos.anular');
+        Route::get('/facturacion/estado-cuenta/{pacienteId}', 'estadoCuenta')->name('caja.estado-cuenta');
     });
 
     // Administración exclusiva para admin

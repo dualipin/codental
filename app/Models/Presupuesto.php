@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Presupuesto extends Model
 {
@@ -29,5 +30,15 @@ class Presupuesto extends Model
     public function detalles(): HasMany
     {
         return $this->hasMany(PresupuestoDetalle::class, 'presupuesto_id');
+    }
+
+    public function distribuciones(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            AbonoDistribucion::class,
+            PresupuestoDetalle::class,
+            'presupuesto_id',
+            'presupuesto_detalle_id'
+        );
     }
 }
