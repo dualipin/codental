@@ -7,10 +7,15 @@ import StepHistorialOdontologico from './steps/StepHistorialOdontologico.vue'
 import { useRegistrarPacienteWizard } from '@/composables/useRegistrarPacienteWizard'
 import type { Doctor } from '@/types/Doctor'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   doctores: Doctor[]
   formularioPublico: boolean
-}>()
+  submitRouteName?: string
+  successButtonLabel?: string
+  variant?: 'standalone' | 'embedded'
+}>(), {
+  variant: 'standalone',
+})
 
 const {
   formulario,
@@ -28,6 +33,7 @@ const {
 } = useRegistrarPacienteWizard({
   doctores: props.doctores,
   formularioPublico: props.formularioPublico,
+  submitRoute: props.submitRouteName ? route(props.submitRouteName) : route('agendar-cita.registrar-paciente'),
 })
 
 function etiquetaPaso(paso: unknown, indice: number): string {
@@ -36,10 +42,10 @@ function etiquetaPaso(paso: unknown, indice: number): string {
 </script>
 
 <template>
-  <div class="min-h-screen bg-linear-to-b from-base-200 to-base-100 py-6 px-4">
-    <div class="mx-auto max-w-6xl">
-      <div class="card border border-base-300 bg-base-100 shadow-xl">
-        <div class="card-body gap-6">
+  <div :class="props.variant === 'embedded' ? '' : 'min-h-screen bg-linear-to-b from-base-200 to-base-100 py-6 px-4'">
+    <div :class="props.variant === 'embedded' ? '' : 'mx-auto max-w-6xl'">
+      <div :class="props.variant === 'embedded' ? 'rounded-box border border-base-300 bg-base-100' : 'card border border-base-300 bg-base-100 shadow-xl'">
+        <div :class="props.variant === 'embedded' ? 'p-6 lg:p-8 space-y-6' : 'card-body gap-6'">
           <div>
             <h1 class="text-2xl font-semibold text-primary">Cuestionario de Expediente Nuevo</h1>
             <p class="mt-1 text-sm text-base-content/70">
@@ -106,7 +112,7 @@ function etiquetaPaso(paso: unknown, indice: number): string {
                 </button>
                 <button v-else @click="enviarFormulario" type="submit" class="btn btn-success" :disabled="formulario.processing">
                   <span v-if="formulario.processing" class="loading loading-spinner loading-sm" />
-                  Guardar y ver agenda
+                  {{ props.successButtonLabel ?? 'Guardar y ver agenda' }}
                 </button>
               </div>
             </div>
