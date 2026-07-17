@@ -1,4 +1,4 @@
-@extends('layouts.agenda')
+@extends('layouts.agendar-cita')
 @section('agenda-content')
     <section class="max-w-4xl mx-auto px-4 py-8">
         <div class="card bg-base-100 shadow-xl border border-base-300">

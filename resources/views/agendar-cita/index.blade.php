@@ -1,4 +1,4 @@
-@extends('layouts.agenda')
+@extends('layouts.agendar-cita')
 @section('agenda-content')
     <div class="hero bg-base-200 min-h-screen -mt-14">
         <div class="hero-content text-center">
