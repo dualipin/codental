@@ -4,12 +4,12 @@
     <nav class="navbar bg-base-100 shadow-lg sticky top-0 z-50">
         <div class="flex-1">
             <a href="#" class="btn btn-ghost text-xl text-primary font-display">
-                <i class="fa-solid fa-tooth"></i> CoDentaL
+                CoDentaL
             </a>
         </div>
         <div class="flex-none">
             <a href="{{ route('login.show') }}" class="btn btn-outline btn-primary">
-                <i class="fa-solid fa-user-lock"></i> Iniciar Sesión
+                <i class="bi bi-person-circle"></i> Iniciar Sesión
             </a>
         </div>
     </nav>
