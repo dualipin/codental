@@ -6,8 +6,23 @@ declare module 'ziggy-js' {
     "agendar-cita.identificar-paciente.show": [],
     "agendar-cita.identificar-paciente": [],
     "agendar-cita.paciente-nuevo.show": [],
+    "agendar-cita.registrar-paciente": [],
     "agendar-cita.calendario.show": [],
     "agendar-cita.calendario.store": [],
+    "agendar-cita.confirmacion": [
+        {
+            "name": "cita",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "agendar-cita.descargar-pdf": [
+        {
+            "name": "cita",
+            "required": true,
+            "binding": "id"
+        }
+    ],
     "login.show": [],
     "login": [],
     "logout": [],
