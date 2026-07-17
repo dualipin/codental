@@ -9,7 +9,7 @@
 
             <main class="flex-1 p-4 lg:p-6">
                 <div class="container">
-                    @yield('app-content')
+                    @inertia
                 </div>
             </main>
         </div>
