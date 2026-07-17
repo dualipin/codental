@@ -62,7 +62,7 @@ function etiquetaPaso(paso: unknown, indice: number): string {
             <span>Hay errores en este paso. Revisa los campos marcados.</span>
           </div>
 
-          <form @submit.prevent="enviarFormulario" class="space-y-6">
+          <form @submit.prevent class="space-y-6">
             <StepDatosPersonales
               v-show="pasoActual === 1"
               :form="formulario"
@@ -104,7 +104,7 @@ function etiquetaPaso(paso: unknown, indice: number): string {
                 <button v-if="pasoActual < totalPasos" type="button" class="btn btn-primary" @click="siguientePaso" :disabled="!pasoActualValido">
                   Siguiente
                 </button>
-                <button v-else type="submit" class="btn btn-success" :disabled="formulario.processing">
+                <button v-else @click="enviarFormulario" type="submit" class="btn btn-success" :disabled="formulario.processing">
                   <span v-if="formulario.processing" class="loading loading-spinner loading-sm" />
                   Guardar y ver agenda
                 </button>
