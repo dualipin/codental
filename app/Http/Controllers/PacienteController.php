@@ -190,4 +190,12 @@ class PacienteController extends Controller
 
         return redirect()->route('pacientes.index')->with('success', 'Paciente eliminado correctamente.');
     }
+
+    function verify(Paciente $paciente)
+    {
+        $paciente->update(['verificado' => !$paciente->verificado]);
+
+        $mensaje = $paciente->verificado ? 'Paciente verificado correctamente.' : 'Verificación removida correctamente.';
+        return back()->with('success', $mensaje);
+    }
 }

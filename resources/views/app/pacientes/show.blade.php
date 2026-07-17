@@ -4,6 +4,17 @@
     <div class="flex items-center justify-between mb-4">
         <h1 class="text-2xl font-bold">{{ $paciente->nombre }} {{ $paciente->apellido_paterno }}</h1>
         <div class="flex gap-2">
+            @if (!$paciente->verificado)
+                <form action="{{ route('pacientes.verify', $paciente) }}" method="POST" onsubmit="return confirm('¿Verificar paciente?')">
+                    @csrf
+                    <button class="btn btn-success">Verificar</button>
+                </form>
+            @else
+                <form action="{{ route('pacientes.verify', $paciente) }}" method="POST" onsubmit="return confirm('¿Quitar verificación al paciente?')">
+                    @csrf
+                    <button class="btn btn-outline btn-error">Quitar verificación</button>
+                </form>
+            @endif
             <a href="{{ route('pacientes.edit', $paciente) }}" class="btn btn-warning">Editar</a>
             <a href="{{ route('pacientes.index') }}" class="btn btn-soft">Volver</a>
         </div>

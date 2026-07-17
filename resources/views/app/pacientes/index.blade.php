@@ -47,6 +47,17 @@
                         <td class="flex gap-1">
                             <a href="{{ route('pacientes.show', $paciente) }}" class="btn btn-xs btn-soft">Ver</a>
                             <a href="{{ route('pacientes.edit', $paciente) }}" class="btn btn-xs btn-warning">Editar</a>
+                            @if (!$paciente->verificado)
+                                <form action="{{ route('pacientes.verify', $paciente) }}" method="POST" onsubmit="return confirm('¿Verificar paciente?')">
+                                    @csrf
+                                    <button class="btn btn-xs btn-success">Verificar</button>
+                                </form>
+                            @else
+                                <form action="{{ route('pacientes.verify', $paciente) }}" method="POST" onsubmit="return confirm('¿Quitar verificación al paciente?')">
+                                    @csrf
+                                    <button class="btn btn-xs btn-outline btn-error">Quitar verificación</button>
+                                </form>
+                            @endif
                             <form action="{{ route('pacientes.destroy', $paciente) }}" method="POST" onsubmit="return confirm('¿Eliminar paciente?')">
                                 @csrf
                                 @method('DELETE')
