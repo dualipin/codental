@@ -60,7 +60,15 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
         Route::post('/caja/facturacion/abonos', [FacturacionController::class, 'registrarAbono'])->name('caja.abonos.store');
         Route::put('/caja/facturacion/abonos/{abono}', [FacturacionController::class, 'actualizarAbono'])->name('caja.abonos.update');
         Route::post('/caja/facturacion/abonos/{abono}/anular', [FacturacionController::class, 'anularAbono'])->name('caja.abonos.anular');
+        
+        // CRM Dashboard de Recepción
+        Route::get('/recepcion/dashboard', [\App\Http\Controllers\DashboardRecepcionController::class, 'index'])->name('recepcion.dashboard');
     });
+
+    // Rutas para Evolución Clínica y Recetas
+    Route::post('/citas/{cita}/evolucion', [\App\Http\Controllers\EvolucionClinicaController::class, 'store'])->name('evolucion.store');
+    Route::get('/recetas/{receta}/pdf/download', [\App\Http\Controllers\RecetaController::class, 'downloadPdf'])->name('recetas.pdf.download');
+    Route::get('/recetas/{receta}/pdf/stream', [\App\Http\Controllers\RecetaController::class, 'streamPdf'])->name('recetas.pdf.stream');
 
     Route::middleware('role.personalizado:' . UserRolEnum::ADMINISTRADOR->value)->group(function () {
         Route::get('/admin/show_usuarios', [RegisuserController::class, 'showUsuarios'])->name('admin.show_usuarios');
