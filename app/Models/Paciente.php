@@ -42,7 +42,8 @@ class Paciente extends Model
     {
         return [
             'telefono' => TelephoneCast::class,
-            'sexo' => SexoEnum::class
+            'sexo' => SexoEnum::class,
+            'fecha_nacimiento' => 'date',
         ];
     }
 }
