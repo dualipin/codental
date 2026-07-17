@@ -84,6 +84,7 @@ const nombreCompleto = (paciente: Paciente) =>
   [paciente.nombre, paciente.apellido_paterno, paciente.apellido_materno].filter(Boolean).join(' ')
 
 const pacientesFiltrados = computed(() => props.pacientes)
+const mostrarResultados = computed(() => busqueda.value.trim().length > 0)
 
 function seleccionarPaciente(paciente: Paciente) {
   router.get(route('caja.facturacion'), { id_pac: paciente.id, q: busqueda.value || undefined }, {
@@ -167,7 +168,7 @@ function formatoMoneda(valor: number): string {
           </div>
         </div>
 
-        <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <div v-if="mostrarResultados" class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           <button
             v-for="item in pacientesFiltrados"
             :key="item.id"
@@ -189,6 +190,10 @@ function formatoMoneda(valor: number): string {
           <div v-if="pacientesFiltrados.length === 0" class="alert alert-warning md:col-span-2 xl:col-span-3">
             <span>No se encontraron pacientes con esa búsqueda.</span>
           </div>
+        </div>
+
+        <div v-else class="alert alert-info">
+          <span>Escribe un nombre, apellido o teléfono para buscar pacientes.</span>
         </div>
       </div>
     </div>
@@ -242,7 +247,7 @@ function formatoMoneda(valor: number): string {
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Detalle a cubrir</span></div>
-                <select v-model="pagoForm.distribucion[0].presupuesto_detalle_id" class="select" required>
+                <select v-model="pagoForm.distribucion[0].presupuesto_detalle_id" class="select w-full" required>
                   <option value="" disabled>Selecciona un tratamiento</option>
                   <option v-for="detalle in tratamientos" :key="detalle.id" :value="String(detalle.id)">
                     {{ detalle.tratamientoCatalogo?.nombre ?? 'Tratamiento' }}
@@ -254,17 +259,17 @@ function formatoMoneda(valor: number): string {
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Monto del pago</span></div>
-                <input v-model="pagoForm.monto" type="number" min="0.01" step="0.01" class="input" required />
+                <input v-model="pagoForm.monto" type="number" min="0.01" step="0.01" class="input w-full" required />
               </label>
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Monto aplicado al tratamiento</span></div>
-                <input v-model="pagoForm.distribucion[0].monto_aplicado" type="number" min="0.01" step="0.01" class="input" required />
+                <input v-model="pagoForm.distribucion[0].monto_aplicado" type="number" min="0.01" step="0.01" class="input w-full" required />
               </label>
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Método de pago</span></div>
-                <select v-model="pagoForm.metodo_pago" class="select" required>
+                <select v-model="pagoForm.metodo_pago" class="select w-full" required>
                   <option value="efectivo">Efectivo</option>
                   <option value="tarjeta">Tarjeta</option>
                   <option value="transferencia">Transferencia</option>
@@ -274,12 +279,12 @@ function formatoMoneda(valor: number): string {
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Referencia bancaria</span></div>
-                <input v-model="pagoForm.referencia_bancaria" type="text" class="input" />
+                <input v-model="pagoForm.referencia_bancaria" type="text" class="input w-full" />
               </label>
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Observación</span></div>
-                <textarea class="textarea" rows="3" placeholder="Opcional"></textarea>
+                <textarea v-model="pagoForm.observacion" class="textarea w-full" rows="3" placeholder="Opcional"></textarea>
               </label>
 
               <button class="btn btn-primary btn-block" type="submit" :disabled="pagoForm.processing">

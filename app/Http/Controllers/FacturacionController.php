@@ -18,23 +18,21 @@ class FacturacionController extends Controller
         $puedeRegistrar = in_array($rol, [UserRolEnum::RECEPCIONISTA->value, UserRolEnum::ADMINISTRADOR->value], true);
         $busqueda = trim((string) $request->query('q', ''));
 
-        // Los pacientes son globales ahora (sin d_user)
-        $pacientesQuery = Paciente::query();
+        $pacientes = collect();
 
         if ($busqueda !== '') {
-            $pacientesQuery->where(function ($query) use ($busqueda) {
-                $query->where('nombre', 'like', '%' . $busqueda . '%')
-                    ->orWhere('apellido_paterno', 'like', '%' . $busqueda . '%')
-                    ->orWhere('apellido_materno', 'like', '%' . $busqueda . '%')
-                    ->orWhere('telefono', 'like', '%' . $busqueda . '%');
-            });
+            $pacientes = Paciente::query()
+                ->where(function ($query) use ($busqueda) {
+                    $query->where('nombre', 'like', '%' . $busqueda . '%')
+                        ->orWhere('apellido_paterno', 'like', '%' . $busqueda . '%')
+                        ->orWhere('apellido_materno', 'like', '%' . $busqueda . '%')
+                        ->orWhere('telefono', 'like', '%' . $busqueda . '%');
+                })
+                ->orderBy('nombre')
+                ->orderBy('apellido_paterno')
+                ->limit(20)
+                ->get();
         }
-
-        $pacientes = $pacientesQuery
-            ->orderBy('nombre')
-            ->orderBy('apellido_paterno')
-            ->limit(20)
-            ->get();
         
         $idPac = $request->query('id_pac');
 
@@ -42,10 +40,6 @@ class FacturacionController extends Controller
             session(['paciente_actual' => $idPac]);
         } else {
             $idPac = session('paciente_actual');
-        }
-
-        if (! $idPac && $pacientes->isNotEmpty()) {
-            $idPac = $pacientes->first()->id;
         }
 
         if (! $idPac) {
