@@ -3,7 +3,10 @@
 
     <aside class="bg-base-200 min-h-dvh w-72 flex flex-col border-r border-base-300">
         <div class="flex items-center gap-3 px-6 py-5 border-b border-base-300">
-            <a class="text-xl font-bold font-display">CoDental</a>
+            <a class="text-xl font-bold font-display flex items-center">
+                <img src="{{ asset('icon.png') }}" alt="Logo" class="size-20 object-cover mr-2 rounded-full">
+                CoDental
+            </a>
         </div>
 
         <nav class="flex-1 overflow-y-auto p-4">
@@ -45,56 +48,6 @@
                         </ul>
                     </details>
                 </li>
-
-                @php
-                    $pacienteActual = session('paciente_actual');
-                @endphp
-                @if($pacienteActual)
-                    <li class="menu-title"><span>Expediente</span></li>
-                    <li>
-                        <details>
-                            <summary>
-                                <i class="bi bi-file-medical-fill"></i> Ficha del Paciente
-                            </summary>
-                            <ul>
-                                <li>
-                                    <a href="{{ route('pacientes.show', $pacienteActual) }}">
-                                        <i class="bi bi-person-vcard-fill"></i>
-                                        Datos Personales
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('pacientes.historia-clinica.edit', $pacienteActual) }}">
-                                        <i class="bi bi-heart-pulse-fill"></i>
-                                        Historia Clínica
-                                    </a>
-                                </li>
-                                <li>
-                                    <details>
-                                        <summary class="ps-0">
-                                            <i class="bi bi-grid-3x3-gap-fill"></i>
-                                            Odontograma
-                                        </summary>
-                                        <ul>
-                                            <li>
-                                                <a href="{{ route('pacientes.odontograma.inicial', $pacienteActual) }}">
-                                                    <i class="bi bi-clipboard-plus-fill"></i>
-                                                    Inicial
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ route('pacientes.odontograma.final', $pacienteActual) }}">
-                                                    <i class="bi bi-clipboard-check-fill"></i>
-                                                    Final / Seguimiento
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </details>
-                                </li>
-                            </ul>
-                        </details>
-                    </li>
-                @endif
 
                 <li class="menu-title"><span>Caja y Facturación</span></li>
                 <li>

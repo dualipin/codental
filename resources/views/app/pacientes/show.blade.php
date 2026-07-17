@@ -33,6 +33,15 @@
         </div>
     </div>
 
+    <div class="flex flex-wrap gap-2 mb-6">
+        <a href="{{ route('pacientes.show', $paciente) }}" class="btn btn-soft">Datos personales</a>
+        @if ($puedeEditarAntecedentesMedicos)
+            <a href="{{ route('pacientes.historia-clinica.edit', $paciente) }}" class="btn btn-soft">Historia clínica</a>
+        @endif
+        <a href="{{ route('pacientes.odontograma.inicial', $paciente) }}" class="btn btn-soft">Odontograma inicial</a>
+        <a href="{{ route('pacientes.odontograma.final', $paciente) }}" class="btn btn-soft">Odontograma final / seguimiento</a>
+    </div>
+
     <div class="card p-6 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -218,6 +227,7 @@
                                 <th>Estado</th>
                                 <th>Dentista</th>
                                 <th>Abonos</th>
+                                <th>PDF</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -235,6 +245,11 @@
                                     </td>
                                     <td>{{ $presupuesto->dentista?->nombre ?? '—' }}</td>
                                     <td>${{ number_format($presupuesto->distribuciones->sum('monto_aplicado'), 2) }}</td>
+                                    <td>
+                                        <a class="link link-primary" href="{{ route('presupuestos.pdf.download', $presupuesto) }}" target="_blank" rel="noopener">
+                                            Descargar
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

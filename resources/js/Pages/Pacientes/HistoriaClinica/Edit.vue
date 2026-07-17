@@ -203,7 +203,7 @@ function guardarHistoriaClinica() {
         </p>
       </div>
 
-      <Link :href="route('pacientes.show', { paciente: paciente.id })" class="btn btn-soft">Volver al expediente</Link>
+      <a :href="route('pacientes.show', { paciente: paciente.id })" class="btn btn-soft">Volver al expediente</a>
     </div>
 
     <div v-if="Object.keys(formulario.errors).length" class="alert alert-error text-sm">

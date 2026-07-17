@@ -29,7 +29,7 @@
             right: 0;
             position: fixed;
             {{--color: {$institutionalColor};--}}
-             padding-top: .27in;
+              padding-top: .27in;
             padding-bottom: 5px;
             margin: .2in .5in .2in;
             border-bottom: 1px solid{{--{$institutionalColor}--}};
@@ -101,8 +101,16 @@
 
 <body>
 {{--<img src="{$documentLogo|noescape}" class="watermark" alt="watermark">--}}
+@php
+    $logoPath = public_path('icon.png');
+    $logoDataUri = is_file($logoPath)
+        ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath))
+        : null;
+@endphp
 <header>
-    {{--    <img src="{$documentLogo|noescape}" class="logo" alt="Logo">--}}
+    @if ($logoDataUri)
+        <img src="{{ $logoDataUri }}" class="logo" alt="Logo">
+    @endif
     <div class="header-title">
         <h1>CoDental</h1>
     </div>

@@ -77,13 +77,13 @@ function guardar(): void {
             </div>
 
             <div class="flex gap-2">
-                <Link
+                <a
                     :href="route('pacientes.odontograma.inicial', paciente.id)"
                     class="btn btn-soft"
                 >
                     Ver Inicial
-                </Link>
-                <Link :href="route('pacientes.index')" class="btn btn-soft">Volver</Link>
+                </a>
+                <a :href="route('pacientes.index')" class="btn btn-soft">Volver</a>
             </div>
         </div>
 

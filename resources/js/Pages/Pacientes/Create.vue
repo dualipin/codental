@@ -10,9 +10,9 @@ import RegistrarPacienteExpedienteWizard from '@/components/Pacientes/RegistrarP
     <div class="flex items-center justify-between">
       <div>
         <h1 class="text-2xl font-bold">Registrar paciente</h1>
-        <p class="text-sm text-base-content/70 mt-1">Completa el expediente en pasos para guardar paciente e historia clinica.</p>
+        <p class="text-sm text-base-content/70 mt-1">Completa el expediente en pasos para guardar paciente e historia clínica.</p>
       </div>
-      <Link :href="route('pacientes.index')" class="btn btn-soft">Volver</Link>
+      <a :href="route('pacientes.index')" class="btn btn-soft">Volver</a>
     </div>
 
     <RegistrarPacienteExpedienteWizard />

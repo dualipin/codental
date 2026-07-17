@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\Receta;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -13,8 +12,12 @@ class RecetaController extends Controller
     {
         $receta->load(['cita.paciente', 'cita.dentista', 'detalles']);
 
-        $pdf = Pdf::loadView('pdf.receta', compact('receta'));
-        
+        $pdf = Pdf::loadView('pdf.receta', compact('receta'))
+            ->setOptions([
+                'isRemoteEnabled' => true,
+                'defaultFont' => 'DejaVu Sans',
+            ]);
+
         return $pdf->download("receta_{$receta->id}.pdf");
     }
 
@@ -22,8 +25,12 @@ class RecetaController extends Controller
     {
         $receta->load(['cita.paciente', 'cita.dentista', 'detalles']);
 
-        $pdf = Pdf::loadView('pdf.receta', compact('receta'));
-        
+        $pdf = Pdf::loadView('pdf.receta', compact('receta'))
+            ->setOptions([
+                'isRemoteEnabled' => true,
+                'defaultFont' => 'DejaVu Sans',
+            ]);
+
         return $pdf->stream("receta_{$receta->id}.pdf");
     }
 }

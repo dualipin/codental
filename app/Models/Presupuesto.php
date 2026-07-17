@@ -12,6 +12,14 @@ class Presupuesto extends Model
     protected $table = 'presupuestos';
     protected $guarded = [];
 
+    protected function casts(): array
+    {
+        return [
+            'fecha_emision' => 'date',
+            'fecha_vencimiento' => 'date',
+        ];
+    }
+
     public function paciente(): BelongsTo
     {
         return $this->belongsTo(Paciente::class, 'paciente_id');

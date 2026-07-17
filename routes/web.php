@@ -10,6 +10,7 @@ use App\Http\Controllers\FichaPacienteController;
 use App\Http\Controllers\HistoriaClinicaController;
 use App\Http\Controllers\OdontogramaController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\PresupuestoPdfController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\CheckFinancialAccess;
@@ -94,6 +95,9 @@ Route::middleware(['auth.personalizado'])->prefix('app')->group(function () {
         Route::post('/facturacion/abonos/{movimiento}/anular', 'anularAbono')->name('caja.abonos.anular');
         Route::get('/facturacion/estado-cuenta/{pacienteId}', 'estadoCuenta')->name('caja.estado-cuenta');
     });
+
+    Route::get('/presupuestos/{presupuesto}/pdf', [PresupuestoPdfController::class, 'download'])
+        ->name('presupuestos.pdf.download');
 
     // Administración exclusiva para admin
     Route::middleware('role.personalizado:' . UserRolEnum::ADMINISTRADOR->value)

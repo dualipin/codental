@@ -10,8 +10,7 @@ use App\Models\HistoriaClinica;
 use App\Models\Paciente;
 use App\Models\User;
 use Carbon\Carbon;
-use Dompdf\Dompdf;
-use Dompdf\Options;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -289,23 +288,13 @@ class CitaController extends Controller
     {
         $cita->load(['paciente', 'dentista']);
 
-        $options = new Options();
-        $options->set('isRemoteEnabled', true);
-        $options->set('defaultFont', 'DejaVu Sans');
-
-        $dompdf = new Dompdf($options);
-
-        $html = view('pdf.cita-confirmacion', [
+        return Pdf::loadView('pdf.cita-confirmacion', [
             'cita' => $cita,
-        ])->render();
-
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('letter', 'portrait');
-        $dompdf->render();
-
-        return response()->streamDownload(
-            fn() => print($dompdf->output()),
-            "cita-{$cita->id}-{$cita->paciente->apellido_paterno}.pdf",
+        ])->setOptions([
+            'isRemoteEnabled' => true,
+            'defaultFont' => 'DejaVu Sans',
+        ])->setPaper('letter', 'portrait')->download(
+            "cita-{$cita->id}-{$cita->paciente->apellido_paterno}.pdf"
         );
     }
 }
