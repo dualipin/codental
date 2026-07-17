@@ -14,7 +14,7 @@ class InertiaAgendaMiddleware extends Middleware
      *
      * @var string
      */
-    protected $rootView = 'layouts.agenda-inertia';
+    protected $rootView = 'layouts.agendar-cita-inertia';
 
     /**
      * Determines the current asset version.
