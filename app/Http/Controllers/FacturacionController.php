@@ -2,37 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Abono;
-use App\Models\CajaPac;
+use App\Models\MovimientoCaja;
 use App\Models\Paciente;
-use App\Models\PacTratSel;
-use App\UserRolEnum;
+use App\Models\PresupuestoDetalle;
+use App\Enums\UserRolEnum;
 use Illuminate\Http\Request;
+use App\Services\CajaService;
 
 class FacturacionController extends Controller
 {
     public function index(Request $request)
     {
-        $rol = session('rol');
-        $puedeRegistrar = $rol === UserRolEnum::RECEPCIONISTA->value;
+        $rol = session('rol') ?? (auth()->user() ? auth()->user()->rol : null);
+        $puedeRegistrar = in_array($rol, [UserRolEnum::RECEPCIONISTA->value, UserRolEnum::ADMINISTRADOR->value], true);
 
-        $queryPacientes = Paciente::query()->orderBy('pnom')->orderBy('papp');
-        if (! in_array($rol, [UserRolEnum::ADMINISTRADOR->value, UserRolEnum::RECEPCIONISTA->value], true)) {
-            $usuarioSesion = session('usuario_model') ?: session('id_usuario') ?: session('usuario');
-            $queryPacientes->where('d_user', $usuarioSesion);
-        }
-
-        $pacientes = $queryPacientes->get();
+        // Los pacientes son globales ahora (sin d_user)
+        $pacientes = Paciente::query()->orderBy('nombre')->orderBy('apellido_paterno')->get();
+        
         $idPac = $request->query('id_pac');
 
         if ($idPac) {
             session(['paciente_actual' => $idPac]);
         } else {
-            $idPac = session('paciente_actual') ?: $idPac;
+            $idPac = session('paciente_actual');
         }
 
         if (! $idPac && $pacientes->isNotEmpty()) {
-            $idPac = $pacientes->first()->idp;
+            $idPac = $pacientes->first()->id;
         }
 
         if (! $idPac) {
@@ -41,132 +37,51 @@ class FacturacionController extends Controller
                 'puedeRegistrar' => $puedeRegistrar,
                 'pacientes' => $pacientes,
                 'paciente' => null,
-                'caja' => null,
+                'saldo' => 0,
+                'total_cargos' => 0,
+                'total_abonos' => 0,
                 'tratamientos' => collect(),
                 'abonos' => collect(),
-                'selectedIdPac' => null,
                 'activeTab' => 'facturacion',
-                'pacientesDisponibles' => $pacientes,
             ]);
         }
 
         $paciente = Paciente::findOrFail($idPac);
-        $caja = CajaPac::firstOrCreate(['id_pac' => $idPac]);
-        $caja->actualizarSaldo();
+        
+        $cajaService = app(CajaService::class);
+        $saldo = $cajaService->calcularSaldoPaciente($idPac);
 
-        $tratamientos = PacTratSel::with(['tratamiento', 'precio'])
-            ->where('id_pac', $idPac)
-            ->orderByDesc('fec_sel')
+        // Tratamientos Aprobados (Cargos)
+        $tratamientos = PresupuestoDetalle::with(['tratamientoCatalogo', 'presupuesto'])
+            ->whereHas('presupuesto', function($q) use ($idPac) {
+                $q->where('paciente_id', $idPac)->where('estado', 'aprobado');
+            })
             ->get();
 
-        $abonos = Abono::with(['tratamientoSeleccionado', 'usuarioRegistro'])
-            ->where('id_pac', $idPac)
-            ->orderByDesc('fec_abo')
+        $total_cargos = $tratamientos->sum(function($t) {
+            return $t->precio_congelado - $t->monto_descuento;
+        });
+
+        // Movimientos (Abonos y Anulaciones)
+        $abonos = MovimientoCaja::with('usuario')
+            ->where('paciente_id', $idPac)
+            ->orderByDesc('fecha_hora')
             ->get();
 
-        return view('facturacion', array_merge(
-            compact(
-                'rol',
-                'puedeRegistrar',
-                'pacientes',
-                'paciente',
-                'caja',
-                'tratamientos',
-                'abonos',
-                'idPac'
-            ),
-            [
-                'activeTab' => 'facturacion',
-                'pacientesDisponibles' => $pacientes,
-            ]
-        ));
-    }
+        $total_abonos = $abonos->sum('monto');
 
-    public function registrarAbono(Request $request)
-    {
-        $this->authorizeRecep();
-
-        $request->validate([
-            'id_pac' => ['required', 'exists:pacientes,idp'],
-            'id_pts' => ['nullable', 'exists:pac_trat_sel,id_pts'],
-            'mon' => ['required', 'numeric', 'min:0.01'],
-            'fec_abo' => ['required', 'date'],
-            'met_pag' => ['required', 'string', 'max:30'],
-            'ref' => ['nullable', 'string', 'max:80'],
-            'obs' => ['nullable', 'string', 'max:250'],
-            'des_apl' => ['nullable', 'numeric', 'min:0'],
+        return view('facturacion', [
+            'rol' => $rol,
+            'puedeRegistrar' => $puedeRegistrar,
+            'pacientes' => $pacientes,
+            'paciente' => $paciente,
+            'saldo' => $saldo,
+            'total_cargos' => $total_cargos,
+            'total_abonos' => $total_abonos,
+            'tratamientos' => $tratamientos,
+            'abonos' => $abonos,
+            'idPac' => $idPac,
+            'activeTab' => 'facturacion',
         ]);
-
-        Abono::create([
-            'id_pac' => $request->input('id_pac'),
-            'id_pts' => $request->input('id_pts'),
-            'mon' => $request->input('mon'),
-            'fec_abo' => $request->input('fec_abo'),
-            'met_pag' => $request->input('met_pag'),
-            'ref' => $request->input('ref'),
-            'obs' => $request->input('obs'),
-            'des_apl' => $request->input('des_apl', 0),
-            'est' => 'Activo',
-            'id_usuario_registro' => session('usuario_model') ?: session('usuario'),
-        ]);
-
-        $caja = CajaPac::firstOrCreate(['id_pac' => $request->input('id_pac')]);
-        $caja->actualizarSaldo();
-
-        return back()->with('success', 'Abono registrado correctamente.');
-    }
-
-    public function actualizarAbono(Request $request, Abono $abono)
-    {
-        $this->authorizeRecep();
-
-        $request->validate([
-            'mon' => ['required', 'numeric', 'min:0.01'],
-            'fec_abo' => ['required', 'date'],
-            'met_pag' => ['required', 'string', 'max:30'],
-            'ref' => ['nullable', 'string', 'max:80'],
-            'obs' => ['nullable', 'string', 'max:250'],
-            'des_apl' => ['nullable', 'numeric', 'min:0'],
-        ]);
-
-        $abono->update([
-            'mon' => $request->input('mon'),
-            'fec_abo' => $request->input('fec_abo'),
-            'met_pag' => $request->input('met_pag'),
-            'ref' => $request->input('ref'),
-            'obs' => $request->input('obs'),
-            'des_apl' => $request->input('des_apl', 0),
-        ]);
-
-        $caja = CajaPac::firstOrCreate(['id_pac' => $abono->id_pac]);
-        $caja->actualizarSaldo();
-
-        return back()->with('success', 'Abono actualizado correctamente.');
-    }
-
-    public function anularAbono(Request $request, Abono $abono)
-    {
-        $this->authorizeRecep();
-
-        $request->validate([
-            'mot_anulacion' => ['required', 'string', 'max:250'],
-        ]);
-
-        $abono->update([
-            'est' => 'Anulado',
-            'mot_anulacion' => $request->input('mot_anulacion'),
-        ]);
-
-        $caja = CajaPac::firstOrCreate(['id_pac' => $abono->id_pac]);
-        $caja->actualizarSaldo();
-
-        return back()->with('success', 'Abono anulado correctamente.');
-    }
-
-    private function authorizeRecep(): void
-    {
-        if (session('rol') !== UserRolEnum::RECEPCIONISTA->value) {
-            abort(403, 'Solo recepción puede registrar o modificar pagos.');
-        }
     }
 }

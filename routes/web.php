@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\UserRolEnum;
+use App\Enums\UserRolEnum;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisuserController;
 use App\Http\Controllers\InicioController;

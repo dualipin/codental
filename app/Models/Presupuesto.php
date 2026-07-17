@@ -25,4 +25,9 @@ class Presupuesto extends Model
     {
         return $this->hasMany(Abono::class, 'presupuesto_id');
     }
+
+    public function detalles(): HasMany
+    {
+        return $this->hasMany(PresupuestoDetalle::class, 'presupuesto_id');
+    }
 }
