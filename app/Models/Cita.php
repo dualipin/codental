@@ -31,6 +31,16 @@ class Cita extends Model
         return $this->belongsTo(Cita::class, 'cita_id');
     }
 
+    public function evolucionClinica()
+    {
+        return $this->hasOne(EvolucionClinica::class, 'cita_id');
+    }
+
+    public function receta()
+    {
+        return $this->hasOne(Receta::class, 'cita_id');
+    }
+
     protected function casts(): array
     {
         return [

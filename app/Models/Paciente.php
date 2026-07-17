@@ -38,6 +38,32 @@ class Paciente extends Model
         return $this->hasOne(HistoriaClinica::class, 'paciente_id');
     }
 
+    public function evolucionesClinicas(): HasMany
+    {
+        return $this->hasMany(EvolucionClinica::class, 'paciente_id');
+    }
+
+    public function recetas(): HasMany
+    {
+        return $this->hasMany(Receta::class, 'paciente_id');
+    }
+
+    public function scopeNeedsFollowUp($query)
+    {
+        // Pacientes cuya última cita completada fue hace más de 6 meses
+        // o tienen tratamientos planificados/en progreso pero sin citas futuras
+        return $query->whereHas('citas', function ($q) {
+            $q->where('estatus', \App\Enums\EstatusCitaEnum::FINALIZADO)
+              ->where('fecha_inicio', '<', now()->subMonths(6));
+        })->orWhere(function ($q) {
+            // Asumiendo que hay forma de ver tratamientos. 
+            // Usaremos la relación con citas para ver si no hay citas futuras
+            $q->whereDoesntHave('citas', function ($q2) {
+                $q2->where('fecha_inicio', '>=', now());
+            });
+        });
+    }
+
     protected function casts(): array
     {
         return [
