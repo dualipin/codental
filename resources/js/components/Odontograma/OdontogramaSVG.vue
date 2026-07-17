@@ -26,8 +26,8 @@ function onSeleccion(diente: number, cara: CaraDental): void {
 <template>
     <div class="w-full overflow-x-auto">
         <svg
-            viewBox="0 0 1100 280"
-            class="w-full h-auto min-w-[900px] text-base-content"
+            viewBox="0 0 1150 225"
+            class="w-full h-auto min-w-[768px] lg:min-w-0 max-w-5xl mx-auto text-base-content"
             xmlns="http://www.w3.org/2000/svg"
         >
             <!-- Fila superior derecha -->

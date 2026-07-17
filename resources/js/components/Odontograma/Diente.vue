@@ -33,53 +33,56 @@ function onClick(cara: CaraDental): void {
             {{ numero }}
         </text>
 
-        <!-- Cara Oclusal/Incisal -->
-        <polygon
-            points="10,12 42,12 36,24 16,24"
+        <path
+            d="M 10,12 Q 26,8 42,12 Q 46,32 42,52 Q 26,56 10,52 Q 6,32 10,12 Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            class="pointer-events-none"
+        />
+
+        <path
+            d="M 10,12 Q 26,8 42,12 L 36,24 L 16,24 Z"
             class="cara cursor-pointer hover:opacity-75 transition-opacity"
             :fill="colorCara('O')"
             stroke="currentColor"
-            stroke-width="1"
+            stroke-width="0.75"
             @click="onClick('O')"
         />
 
-        <!-- Cara Mesial -->
-        <polygon
-            points="10,12 16,24 16,40 10,52"
+        <path
+            d="M 10,12 Q 6,32 10,52 L 16,40 L 16,24 Z"
             class="cara cursor-pointer hover:opacity-75 transition-opacity"
             :fill="colorCara('M')"
             stroke="currentColor"
-            stroke-width="1"
+            stroke-width="0.75"
             @click="onClick('M')"
         />
 
-        <!-- Cara Distal -->
-        <polygon
-            points="42,12 36,24 36,40 42,52"
+        <path
+            d="M 42,12 Q 46,32 42,52 L 36,40 L 36,24 Z"
             class="cara cursor-pointer hover:opacity-75 transition-opacity"
             :fill="colorCara('D')"
             stroke="currentColor"
-            stroke-width="1"
+            stroke-width="0.75"
             @click="onClick('D')"
         />
 
-        <!-- Cara Vestibular -->
-        <polygon
-            points="16,24 36,24 36,40 16,40"
+        <path
+            d="M 16,24 L 36,24 L 36,40 L 16,40 Z"
             class="cara cursor-pointer hover:opacity-75 transition-opacity"
             :fill="colorCara('V')"
             stroke="currentColor"
-            stroke-width="1"
+            stroke-width="0.75"
             @click="onClick('V')"
         />
 
-        <!-- Cara Lingual/Palatino -->
-        <polygon
-            points="10,52 42,52 36,40 16,40"
+        <path
+            d="M 10,52 Q 26,56 42,52 L 36,40 L 16,40 Z"
             class="cara cursor-pointer hover:opacity-75 transition-opacity"
             :fill="colorCara('L')"
             stroke="currentColor"
-            stroke-width="1"
+            stroke-width="0.75"
             @click="onClick('L')"
         />
     </g>
