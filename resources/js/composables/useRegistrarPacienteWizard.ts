@@ -256,7 +256,7 @@ function construirPayload(
     }
 }
 
-export function useRegistrarPacienteWizard(props: { doctores: Doctor[]; formularioPublico: boolean }) {
+export function useRegistrarPacienteWizard(props: { doctores: Doctor[]; formularioPublico: boolean; submitRoute: string }) {
     const store = useRegistrarPacienteWizardStore()
     store.setFormularioPublico(props.formularioPublico)
 
@@ -448,7 +448,7 @@ export function useRegistrarPacienteWizard(props: { doctores: Doctor[]; formular
     function enviarFormulario() {
         const payload = construirPayload(formulario, esFormularioPublico.value)
 
-        const path = esFormularioPublico.value ? route('agendar-cita.registrar-paciente') : route('agendar-cita.registrar-paciente')
+        const path = props.submitRoute
 
         formulario
             .transform(() => payload)
