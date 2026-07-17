@@ -16,13 +16,6 @@ class UserController extends Controller
         return view('app.users.index', ['usuarios' => $usuarios]);
     }
 
-
-    public function show(int $id)
-    {
-        $usuario = User::find($id);
-        return view('app.users.show', ['usuario' => $usuario]);
-    }
-
     public function create()
     {
         return view('app.users.create');
@@ -119,5 +112,27 @@ class UserController extends Controller
     {
         $usuario = User::findOrFail($id);
         return view('app.users.profile', ['usuario' => $usuario]);
+    }
+
+    public function settings(int $id)
+    {
+        $usuario = User::findOrFail($id);
+
+        return view('app.users.settings', ['usuario' => $usuario]);
+    }
+
+    public function updateSettings(Request $request, int $id)
+    {
+        $user = User::findOrFail($id);
+
+        $validated = $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user->update([
+            'password' => $validated['password'],
+        ]);
+
+        return redirect()->route('usuarios.settings', $user)->with('success', 'Contraseña actualizada correctamente.');
     }
 }
