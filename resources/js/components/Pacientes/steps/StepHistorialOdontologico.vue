@@ -129,6 +129,33 @@ const { form } = defineProps<{
         <span class="label-text">Cuáles hábitos</span>
         <input v-model="form.detalleHabitosOrales" type="text" class="input input-bordered w-full" maxlength="100">
       </label>
+
+      <div class="md:col-span-2 rounded-box border border-base-300 p-4 space-y-3">
+        <h3 class="font-medium">ATM</h3>
+        <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
+          <label class="label cursor-pointer justify-start gap-3 rounded-box border border-base-300 px-3 py-2">
+            <input v-model="form.malestarAbrirBocas" type="checkbox" class="checkbox checkbox-primary checkbox-sm">
+            <span class="label-text">Malestar al abrir la boca</span>
+          </label>
+          <label class="label cursor-pointer justify-start gap-3 rounded-box border border-base-300 px-3 py-2">
+            <input v-model="form.malestarMovimientoLateral" type="checkbox" class="checkbox checkbox-primary checkbox-sm">
+            <span class="label-text">Malestar en movimiento lateral</span>
+          </label>
+          <label class="label cursor-pointer justify-start gap-3 rounded-box border border-base-300 px-3 py-2">
+            <input v-model="form.chasquidosCrepitaciones" type="checkbox" class="checkbox checkbox-primary checkbox-sm">
+            <span class="label-text">Chasquidos o crepitaciones</span>
+          </label>
+          <label class="label cursor-pointer justify-start gap-3 rounded-box border border-base-300 px-3 py-2">
+            <input v-model="form.desviacionMandibula" type="checkbox" class="checkbox checkbox-primary checkbox-sm">
+            <span class="label-text">Desviación mandibular</span>
+          </label>
+        </div>
+      </div>
+
+      <label class="form-control md:col-span-2">
+        <span class="label-text">Tejidos blandos y duros</span>
+        <textarea v-model="form.tejidosBlandosDuros" class="textarea textarea-bordered w-full" rows="3" maxlength="500" />
+      </label>
     </div>
   </section>
 </template>

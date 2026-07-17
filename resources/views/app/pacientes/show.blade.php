@@ -1,9 +1,21 @@
 @extends('layouts.app')
 
 @section('app-content')
+    @php
+        use App\Enums\UserRolEnum;
+
+        $hc = $paciente->historiaClinica;
+        $usuario = auth()->user();
+        $rolUsuario = $usuario?->rol instanceof UserRolEnum ? $usuario->rol->value : (string) $usuario?->rol;
+        $puedeEditarAntecedentesMedicos = in_array($rolUsuario, [UserRolEnum::DENTISTA->value, UserRolEnum::ADMINISTRADOR->value], true);
+    @endphp
+
     <div class="flex items-center justify-between mb-4">
         <h1 class="text-2xl font-bold">{{ $paciente->nombre }} {{ $paciente->apellido_paterno }}</h1>
         <div class="flex gap-2">
+            @if ($puedeEditarAntecedentesMedicos)
+                <a href="{{ route('pacientes.historia-clinica.edit', $paciente) }}" class="btn btn-primary">Editar historia clínica</a>
+            @endif
             @if (!$paciente->verificado)
                 <form action="{{ route('pacientes.verify', $paciente) }}" method="POST" onsubmit="return confirm('¿Verificar paciente?')">
                     @csrf
@@ -72,7 +84,6 @@
     <div role="tablist" class="tabs tabs-bordered mb-6">
         <input type="radio" name="expediente_tabs" role="tab" class="tab" aria-label="Historia Clínica" checked="checked" />
         <div role="tabpanel" class="tab-content py-4">
-            @php $hc = $paciente->historiaClinica; @endphp
             @if ($hc)
                 <div class="space-y-4">
                     <div class="collapse collapse-arrow bg-base-200">

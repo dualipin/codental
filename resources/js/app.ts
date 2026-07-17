@@ -4,6 +4,7 @@ import {createApp, h} from "vue";
 import {createPinia} from 'pinia'
 import Vue3Toastify, {type ToastContainerOptions} from 'vue3-toastify';
 import {ZiggyVue} from "ziggy-js";
+import VueKonva from 'vue-konva'
 
 const pinia = createPinia()
 
@@ -16,6 +17,7 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue)
             .use(pinia)
+            .use(VueKonva)
             .use(Vue3Toastify, {
                 autoClose: 3000
             } as ToastContainerOptions)

@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('caras_dentales', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');       // "Oclusal", "Mesial", etc.
-            $table->string('codigo', 2)->nullable();  // "O", "M", "D" - útil para notación rápida en el odontograma
+            $table->string('codigo', 2)->nullable()->index();  // V, L, M, D, O, C - útil para notación rápida en el odontograma
             $table->text('descripcion')->nullable();
             $table->timestamps();
         });

@@ -59,6 +59,11 @@ export interface PacienteExpedienteWizardForm {
   frecuenciaUlcerasOrales: string
   habitosOrales: boolean
   detalleHabitosOrales: string
+  malestarAbrirBocas: boolean
+  malestarMovimientoLateral: boolean
+  chasquidosCrepitaciones: boolean
+  desviacionMandibula: boolean
+  tejidosBlandosDuros: string
 }
 
 export function createDefaultPacienteExpedienteWizardForm(): PacienteExpedienteWizardForm {
@@ -118,5 +123,10 @@ export function createDefaultPacienteExpedienteWizardForm(): PacienteExpedienteW
     frecuenciaUlcerasOrales: '',
     habitosOrales: false,
     detalleHabitosOrales: '',
+    malestarAbrirBocas: false,
+    malestarMovimientoLateral: false,
+    chasquidosCrepitaciones: false,
+    desviacionMandibula: false,
+    tejidosBlandosDuros: '',
   }
 }

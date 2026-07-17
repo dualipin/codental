@@ -57,6 +57,7 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, themePlugin],
   initialView: 'timeGridWeek',
   locale: esLocale,
+  timeZone: 'America/Mexico_City',
   headerToolbar: {
     left: 'prev,next today',
     center: 'title',

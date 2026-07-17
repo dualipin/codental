@@ -8,4 +8,8 @@ class Diente extends Model
 {
     protected $table = 'dientes';
     protected $guarded = [];
+
+    protected $casts = [
+        'numero_fdi' => 'integer',
+    ];
 }

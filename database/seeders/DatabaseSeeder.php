@@ -35,5 +35,11 @@ class DatabaseSeeder extends Seeder
 
 
         Paciente::factory(10)->create();
+
+        $this->call([
+            CarasDentalesSeeder::class,
+            DienteSeeder::class,
+            EnfermedadSeeder::class,
+        ]);
     }
 }

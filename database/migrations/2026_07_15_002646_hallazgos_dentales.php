@@ -19,6 +19,7 @@ return new class extends Migration {
             // afectan la pieza completa, no una cara específica
             $table->foreignId('enfermedad_id')->constrained('enfermedades');
             $table->enum('estado', ['activo', 'resuelto', 'descartado'])->default('activo');
+            $table->boolean('en_plan')->default(false);
             $table->text('notas')->nullable();
             $table->timestamps();
 

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRolEnum;
 use App\Models\Antecedente;
 use App\Models\CajaPac;
 use App\Models\OdontoInicial;
 use App\Models\OdontoTrat;
 use App\Models\Paciente;
 use App\Models\PacTratSel;
-use App\UserRolEnum;
-use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class FichaPacienteController extends Controller
 {

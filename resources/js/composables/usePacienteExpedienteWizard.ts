@@ -315,12 +315,12 @@ export function usePacienteExpedienteWizard() {
             : '',
         },
         atm: {
-          malestarAbrirBocas: false,
-          malestarMovimientoLateral: false,
-          chasquidosCrepitaciones: false,
-          desviacionMandibula: false,
+          malestarAbrirBocas: formulario.malestarAbrirBocas,
+          malestarMovimientoLateral: formulario.malestarMovimientoLateral,
+          chasquidosCrepitaciones: formulario.chasquidosCrepitaciones,
+          desviacionMandibula: formulario.desviacionMandibula,
         },
-        tejidos_blandos_duros: '',
+        tejidos_blandos_duros: limpiarTexto(formulario.tejidosBlandosDuros),
       }))
       .post(route('pacientes.store', {}, false), {
         preserveScroll: true,

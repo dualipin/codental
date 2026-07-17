@@ -2,6 +2,9 @@
 declare module 'ziggy-js' {
   interface RouteList {
     "index": [],
+    "login.show": [],
+    "login": [],
+    "logout": [],
     "agendar-cita": [],
     "agendar-cita.identificar-paciente.show": [],
     "agendar-cita.identificar-paciente": [],
@@ -23,64 +26,138 @@ declare module 'ziggy-js' {
             "binding": "id"
         }
     ],
-    "login.show": [],
-    "login": [],
-    "logout": [],
     "agenda": [],
-    "agenda.panel": [],
-    "pacientes.seleccionar": [
+    "agenda.citas.confirmar": [
         {
-            "name": "idPac",
+            "name": "cita",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "agenda.citas.confirmar.update": [
+        {
+            "name": "cita",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "agenda.citas.cancelar": [
+        {
+            "name": "cita",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "usuarios": [],
+    "usuarios.create": [],
+    "usuarios.store": [],
+    "usuarios.edit": [
+        {
+            "name": "user",
             "required": true
         }
     ],
-    "pacientes.personal": [],
-    "pacientes.datos": [],
-    "pacientes.datos.update": [
+    "usuarios.update": [
         {
-            "name": "idPac",
+            "name": "user",
             "required": true
         }
     ],
-    "pacientes.antecedentes": [],
-    "pacientes.antecedentes.update": [
+    "usuarios.destroy": [
         {
-            "name": "idPac",
+            "name": "user",
             "required": true
         }
     ],
-    "pacientes.plan_tratamiento": [],
-    "pacientes.facturacion": [],
-    "odontograma.index": [],
-    "odontograma.store": [],
+    "usuarios.profile": [
+        {
+            "name": "user",
+            "required": true
+        }
+    ],
+    "usuarios.settings": [
+        {
+            "name": "user",
+            "required": true
+        }
+    ],
+    "usuarios.settings.update": [
+        {
+            "name": "user",
+            "required": true
+        }
+    ],
     "pacientes.index": [],
-    "pacientes.regispacientes": [],
-    "agenda.cita.store": [],
-    "caja.facturacion": [],
-    "caja.abonos.store": [],
-    "caja.abonos.update": [
+    "pacientes.create": [],
+    "pacientes.store": [],
+    "pacientes.edit": [
         {
-            "name": "abono",
+            "name": "paciente",
             "required": true,
             "binding": "id"
         }
     ],
-    "caja.abonos.anular": [
+    "pacientes.update": [
         {
-            "name": "abono",
+            "name": "paciente",
             "required": true,
             "binding": "id"
         }
     ],
-    "admin.show_usuarios": [],
-    "admin.registro_usuario": [],
-    "admin.registro_usuario.store": [],
-    "usuarios.index": [],
-    "usuarios.registrar": [],
-    "usuarios.detalle": [
+    "pacientes.destroy": [
         {
-            "name": "id",
-            "required": true
+            "name": "paciente",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "pacientes.show": [
+        {
+            "name": "paciente",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "pacientes.verify": [
+        {
+            "name": "paciente",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "pacientes.historia-clinica.edit": [
+        {
+            "name": "paciente",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "pacientes.historia-clinica.update": [
+        {
+            "name": "paciente",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "pacientes.odontograma.inicial": [
+        {
+            "name": "paciente",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "pacientes.odontograma.final": [
+        {
+            "name": "paciente",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "pacientes.odontograma.guardar": [
+        {
+            "name": "paciente",
+            "required": true,
+            "binding": "id"
         }
     ],
     "storage.local": [
