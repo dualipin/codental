@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRolEnum;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +30,10 @@ class AuthController extends Controller
         }
 
         auth()->login($usuario);
+
+        if (auth()->user()->rol == UserRolEnum::RECEPCIONISTA) {
+            return redirect()->route('recepcion.dashboard');
+        }
 
         return redirect()->route('agenda');
     }

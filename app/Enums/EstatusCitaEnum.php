@@ -8,4 +8,5 @@ enum EstatusCitaEnum: string
     case CONFIRMADA = 'Confirmada';
     case CANCELADA = 'Cancelada';
     case REPROGRAMADA = 'Reprogramada';
+    case FINALIZADO = 'Finalizado';
 }

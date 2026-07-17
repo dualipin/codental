@@ -53,7 +53,7 @@ class Paciente extends Model
         // Pacientes cuya última cita completada fue hace más de 6 meses
         // o tienen tratamientos planificados/en progreso pero sin citas futuras
         return $query->whereHas('citas', function ($q) {
-            $q->where('estatus', \App\Enums\EstatusCitaEnum::FINALIZADO)
+            $q->where('estatus', \App\Enums\EstatusCitaEnum::FINALIZADO->value)
               ->where('fecha_inicio', '<', now()->subMonths(6));
         })->orWhere(function ($q) {
             // Asumiendo que hay forma de ver tratamientos. 

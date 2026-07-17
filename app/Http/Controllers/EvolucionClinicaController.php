@@ -43,7 +43,7 @@ class EvolucionClinicaController extends Controller
                     ->update(['estado' => 'completado']);
             }
 
-            $cita->update(['estatus' => EstatusCitaEnum::FINALIZADO]);
+            $cita->update(['estatus' => EstatusCitaEnum::FINALIZADO->value]);
         });
 
         return redirect()->back()->with('success', 'Evolución clínica guardada exitosamente.');
