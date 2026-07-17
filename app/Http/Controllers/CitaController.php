@@ -20,7 +20,6 @@ use function back;
 use function redirect;
 use function route;
 use function session;
-use function Spatie\LaravelPdf\Support\pdf;
 
 
 class CitaController extends Controller
@@ -28,7 +27,7 @@ class CitaController extends Controller
 
     public function index()
     {
-        return view('agenda.index');
+        return view('agendar-cita.index');
     }
 
     public function registrarPacienteShow()
@@ -148,7 +147,7 @@ class CitaController extends Controller
 
     public function identificarPacienteShow()
     {
-        return view('agenda.identificar-paciente');
+        return view('agendar-cita.identificar-paciente');
     }
 
     public function identificarPaciente(Request $request)
