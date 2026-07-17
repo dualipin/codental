@@ -112,6 +112,11 @@ function formatearFecha(iso: string): string {
     minute: '2-digit',
   })
 }
+
+function limpiarFiltros() {
+  dentistaId.value = ''
+  form.motivo = ''
+}
 </script>
 
 <template>
@@ -121,6 +126,7 @@ function formatearFecha(iso: string): string {
     <div class="mx-auto max-w-6xl px-4 py-6">
       <div class="card border border-base-300 bg-base-100 shadow-xl">
         <div class="card-body gap-6">
+          <!-- Header -->
           <div>
             <h1 class="text-2xl font-semibold text-primary">Selecciona tu horario</h1>
             <p class="mt-1 text-sm text-base-content/70">
@@ -128,39 +134,74 @@ function formatearFecha(iso: string): string {
             </p>
           </div>
 
+          <!-- Alertas -->
           <div v-if="form.recentlySuccessful" class="alert alert-success">
             Cita agendada correctamente. Serás redirigido al inicio.
           </div>
-
           <div v-if="(form.errors as any).horario" class="alert alert-error text-sm">
             {{ (form.errors as any).horario }}
           </div>
 
-          <label class="form-control max-w-xl">
-            <span class="label-text">Selecciona el dentista *</span>
-            <select v-model="dentistaId" class="select select-bordered w-full" required>
-              <option value="" disabled>Selecciona un dentista</option>
-              <option
-                  v-for="doctor in doctores"
-                  :key="String(doctor.id)"
-                  :value="String(doctor.id)"
+          <!-- Filtros flotantes compactos -->
+          <div class="relative">
+            <!-- Contenedor flotante -->
+            <div class="flex flex-wrap items-center gap-2 bg-base-200/80 rounded-box border border-base-300/50 px-3 py-1.5 shadow-sm hover:shadow-md transition-all">
+              <!-- Dentista -->
+              <div class="flex items-center gap-1.5">
+                <i class="bi bi-person text-base-content/50 text-lg"></i>
+                <select
+                    v-model="dentistaId"
+                    class="select select-ghost select-xs min-w-30 focus:outline-none bg-transparent px-1 py-0 text-sm font-medium"
+                    required
+                >
+                  <option value="" disabled class="font-normal">Dentista</option>
+                  <option
+                      v-for="doctor in doctores"
+                      :key="String(doctor.id)"
+                      :value="String(doctor.id)"
+                      class="font-normal"
+                  >
+                    Dr(a). {{ doctor.nombre }} {{ doctor.apellido_paterno }}
+                  </option>
+                </select>
+                <span v-if="dentistaId" class="text-xs text-primary font-medium">✓</span>
+              </div>
+
+              <!-- Separador -->
+              <div class="w-px h-5 bg-base-300/50"></div>
+
+              <!-- Motivo -->
+              <div class="flex items-center gap-1.5 flex-1 min-w-30">
+               <i class="bi bi-pencil-square text-base-content/50 text-lg"></i>
+                <input
+                    v-model="form.motivo"
+                    type="text"
+                    class="input input-ghost input-xs w-full bg-transparent px-1 py-0 text-sm placeholder:text-base-content/30 focus:outline-none"
+                    placeholder="Motivo (opcional)"
+                    maxlength="500"
+                />
+              </div>
+
+              <!-- Contador de caracteres -->
+              <span v-if="form.motivo?.length" class="text-[10px] text-base-content/30 font-mono tabular-nums">
+                {{ form.motivo.length }}
+              </span>
+
+              <!-- Botón limpiar (solo si hay algo) -->
+              <button
+                  v-if="dentistaId || form.motivo"
+                  class="btn btn-ghost btn-xs px-1.5 text-base-content/30 hover:text-error transition-colors"
+                  @click="limpiarFiltros"
               >
-                Dr(a). {{ doctor.nombre }} {{ doctor.apellido_paterno }}
-              </option>
-            </select>
-          </label>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
 
-          <label class="form-control max-w-xl">
-            <span class="label-text">Motivo de la cita <span class="text-xs text-base-content/50">(opcional)</span></span>
-            <textarea
-              v-model="form.motivo"
-              class="textarea textarea-bordered h-24 w-full"
-              placeholder="Describe el motivo de tu consulta..."
-              maxlength="500"
-            />
-          </label>
-
-          <div v-if="dentistaId">
+          <!-- Calendario -->
+          <div v-if="dentistaId" class="mt-2">
             <FullCalendar :options="calendarOptions"/>
           </div>
 
@@ -173,17 +214,20 @@ function formatearFecha(iso: string): string {
             <p class="text-lg">Selecciona un dentista para ver su disponibilidad</p>
           </div>
 
+          <!-- Horario seleccionado -->
           <div
               v-if="selectedStart && selectedEnd && dentistaId"
-              class="rounded-box border border-primary/30 bg-primary/5 p-4"
+              class="rounded-box border border-primary/30 bg-primary/5 p-4 flex flex-wrap items-center justify-between gap-4"
           >
-            <h3 class="font-semibold text-primary">Horario seleccionado</h3>
-            <p class="mt-1 text-sm">
-              {{ formatearFecha(selectedStart) }}
-            </p>
+            <div>
+              <h3 class="font-semibold text-primary text-sm">Horario seleccionado</h3>
+              <p class="mt-1 text-sm">
+                {{ formatearFecha(selectedStart) }}
+              </p>
+            </div>
             <button
                 type="button"
-                class="btn btn-primary mt-3"
+                class="btn btn-primary btn-sm"
                 :disabled="form.processing"
                 @click="confirmarCita"
             >
@@ -196,3 +240,21 @@ function formatearFecha(iso: string): string {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Estilos adicionales para el efecto flotante */
+.select-ghost,
+.input-ghost {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  outline: none;
+}
+
+.select-ghost:focus,
+.input-ghost:focus {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+</style>
