@@ -62,8 +62,8 @@ RUN mkdir -p \
  && chown -R www-data:www-data storage bootstrap/cache \
  && chmod -R 775 storage bootstrap/cache
 
-EXPOSE 80
+EXPOSE 8000
 
 CMD mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs && \
     chown -R www-data:www-data storage bootstrap/cache && \
-    frankenphp php-server --root public
+    frankenphp php-server --root public --port 8000
