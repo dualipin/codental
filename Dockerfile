@@ -62,7 +62,7 @@ RUN mkdir -p \
  && chown -R www-data:www-data storage bootstrap/cache \
  && chmod -R 775 storage bootstrap/cache
 
-EXPOSE 443
+EXPOSE 80
 
 CMD mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs && \
     chown -R www-data:www-data storage bootstrap/cache && \
