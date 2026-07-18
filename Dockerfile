@@ -7,7 +7,9 @@ WORKDIR /app
 
 COPY composer.json composer.lock ./
 
-RUN composer install \
+# CRÍTICO PARA LA VELOCIDAD: Cacheamos los paquetes descargados
+RUN --mount=type=cache,target=/tmp/cache \
+    composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \
@@ -28,7 +30,9 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci
+# CRÍTICO PARA LA VELOCIDAD: Cacheamos los paquetes de NPM
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
 
 COPY . .
 
@@ -54,17 +58,21 @@ WORKDIR /app
 COPY --from=vendor /app /app
 COPY --from=frontend /app/public/build ./public/build
 
+# Pre-creamos directorios en la imagen base
 RUN mkdir -p \
     storage/framework/cache \
     storage/framework/sessions \
     storage/framework/views \
     storage/logs \
+    bootstrap/cache \
  && chown -R www-data:www-data storage bootstrap/cache \
  && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 80
 
-CMD mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions storage/logs && \
+# El CMD corregido: Crea carpetas -> Asigna permisos (vital para los volúmenes de Coolify) -> Optimiza -> Migra -> Arranca
+CMD mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions storage/logs bootstrap/cache && \
+    chown -R www-data:www-data storage bootstrap/cache && \
     php artisan optimize && \
     php artisan migrate --force && \
     frankenphp php-server -r public/
