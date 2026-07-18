@@ -83,7 +83,7 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
-import PrescriptionBuilder from '@/Components/PrescriptionBuilder.vue';
+import PrescriptionBuilder from '@/components/PrescriptionBuilder.vue';
 import type { EvolutionNote } from '@/types';
 
 const props = defineProps<{
