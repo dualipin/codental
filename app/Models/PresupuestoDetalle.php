@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Database\Factories\PresupuestoDetalleFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PresupuestoDetalle extends Model
 {
+    /** @use HasFactory<PresupuestoDetalleFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'presupuesto_id',
         'tratamiento_catalogo_id',

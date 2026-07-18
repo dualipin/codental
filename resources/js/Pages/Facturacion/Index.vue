@@ -158,7 +158,7 @@ function formatoMoneda(valor: number): string {
             <input
               v-model="busqueda"
               type="text"
-              class="input"
+              class="input input-bordered w-full"
               placeholder="Nombre, apellido o teléfono"
               autocomplete="off"
             />
@@ -247,7 +247,7 @@ function formatoMoneda(valor: number): string {
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Detalle a cubrir</span></div>
-                <select v-model="pagoForm.distribucion[0].presupuesto_detalle_id" class="select w-full" required>
+                <select v-model="pagoForm.distribucion[0].presupuesto_detalle_id" class="select select-bordered w-full" required>
                   <option value="" disabled>Selecciona un tratamiento</option>
                   <option v-for="detalle in tratamientos" :key="detalle.id" :value="String(detalle.id)">
                     {{ detalle.tratamientoCatalogo?.nombre ?? 'Tratamiento' }}
@@ -259,17 +259,17 @@ function formatoMoneda(valor: number): string {
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Monto del pago</span></div>
-                <input v-model="pagoForm.monto" type="number" min="0.01" step="0.01" class="input w-full" required />
+                <input v-model="pagoForm.monto" type="number" min="0.01" step="0.01" class="input input-bordered w-full" required />
               </label>
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Monto aplicado al tratamiento</span></div>
-                <input v-model="pagoForm.distribucion[0].monto_aplicado" type="number" min="0.01" step="0.01" class="input w-full" required />
+                <input v-model="pagoForm.distribucion[0].monto_aplicado" type="number" min="0.01" step="0.01" class="input input-bordered w-full" required />
               </label>
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Método de pago</span></div>
-                <select v-model="pagoForm.metodo_pago" class="select w-full" required>
+                <select v-model="pagoForm.metodo_pago" class="select select-bordered w-full" required>
                   <option value="efectivo">Efectivo</option>
                   <option value="tarjeta">Tarjeta</option>
                   <option value="transferencia">Transferencia</option>
@@ -279,12 +279,12 @@ function formatoMoneda(valor: number): string {
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Referencia bancaria</span></div>
-                <input v-model="pagoForm.referencia_bancaria" type="text" class="input w-full" />
+                <input v-model="pagoForm.referencia_bancaria" type="text" class="input input-bordered w-full" />
               </label>
 
               <label class="form-control">
                 <div class="label"><span class="label-text">Observación</span></div>
-                <textarea v-model="pagoForm.observacion" class="textarea w-full" rows="3" placeholder="Opcional"></textarea>
+                <textarea v-model="pagoForm.observacion" class="textarea textarea-bordered w-full" rows="3" placeholder="Opcional"></textarea>
               </label>
 
               <button class="btn btn-primary btn-block" type="submit" :disabled="pagoForm.processing">

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Database\Factories\PresupuestoFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,6 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Presupuesto extends Model
 {
+    /** @use HasFactory<PresupuestoFactory> */
+    use HasFactory;
+
     protected $table = 'presupuestos';
     protected $guarded = [];
 

@@ -27,6 +27,7 @@ declare module 'ziggy-js' {
         }
     ],
     "agenda": [],
+    "agenda.citas.store": [],
     "agenda.citas.confirmar": [
         {
             "name": "cita",
@@ -48,45 +49,28 @@ declare module 'ziggy-js' {
             "binding": "id"
         }
     ],
-    "usuarios": [],
-    "usuarios.create": [],
-    "usuarios.store": [],
-    "usuarios.edit": [
+    "evolucion.store": [
         {
-            "name": "user",
-            "required": true
+            "name": "cita",
+            "required": true,
+            "binding": "id"
         }
     ],
-    "usuarios.update": [
+    "recetas.pdf.download": [
         {
-            "name": "user",
-            "required": true
+            "name": "receta",
+            "required": true,
+            "binding": "id"
         }
     ],
-    "usuarios.destroy": [
+    "recetas.pdf.stream": [
         {
-            "name": "user",
-            "required": true
+            "name": "receta",
+            "required": true,
+            "binding": "id"
         }
     ],
-    "usuarios.profile": [
-        {
-            "name": "user",
-            "required": true
-        }
-    ],
-    "usuarios.settings": [
-        {
-            "name": "user",
-            "required": true
-        }
-    ],
-    "usuarios.settings.update": [
-        {
-            "name": "user",
-            "required": true
-        }
-    ],
+    "recepcion.dashboard": [],
     "pacientes.index": [],
     "pacientes.create": [],
     "pacientes.store": [],
@@ -158,6 +142,67 @@ declare module 'ziggy-js' {
             "name": "paciente",
             "required": true,
             "binding": "id"
+        }
+    ],
+    "caja.facturacion": [],
+    "caja.facturacion.buscar-pacientes": [],
+    "caja.abonos.store": [],
+    "caja.abonos.anular": [
+        {
+            "name": "movimiento",
+            "required": true
+        }
+    ],
+    "caja.estado-cuenta": [
+        {
+            "name": "pacienteId",
+            "required": true
+        }
+    ],
+    "presupuestos.pdf.download": [
+        {
+            "name": "presupuesto",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "usuarios": [],
+    "usuarios.create": [],
+    "usuarios.store": [],
+    "usuarios.edit": [
+        {
+            "name": "user",
+            "required": true
+        }
+    ],
+    "usuarios.update": [
+        {
+            "name": "user",
+            "required": true
+        }
+    ],
+    "usuarios.destroy": [
+        {
+            "name": "user",
+            "required": true
+        }
+    ],
+    "usuarios.profile": [
+        {
+            "name": "user",
+            "required": true
+        }
+    ],
+    "usuarios.settings": [
+        {
+            "name": "user",
+            "required": true
+        }
+    ],
+    "usuarios.settings.update": [
+        {
+            "name": "user",
+            "required": true
         }
     ],
     "storage.local": [

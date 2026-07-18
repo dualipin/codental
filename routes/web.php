@@ -56,7 +56,9 @@ Route::middleware(['auth.personalizado'])->prefix('app')->group(function () {
     });
 
     // Rutas para Evolución Clínica y Recetas
+    Route::get('/citas/{cita}/evolucion', [\App\Http\Controllers\EvolucionClinicaController::class, 'create'])->name('evolucion.create');
     Route::post('/citas/{cita}/evolucion', [\App\Http\Controllers\EvolucionClinicaController::class, 'store'])->name('evolucion.store');
+    Route::get('/evoluciones/{evolucion}/pdf', [\App\Http\Controllers\EvolucionClinicaController::class, 'downloadPdf'])->name('evolucion.pdf');
     Route::get('/recetas/{receta}/pdf/download', [\App\Http\Controllers\RecetaController::class, 'downloadPdf'])->name('recetas.pdf.download');
     Route::get('/recetas/{receta}/pdf/stream', [\App\Http\Controllers\RecetaController::class, 'streamPdf'])->name('recetas.pdf.stream');
 
@@ -80,6 +82,9 @@ Route::middleware(['auth.personalizado'])->prefix('app')->group(function () {
         ->name('pacientes.historia-clinica.edit');
     Route::patch('/pacientes/{paciente}/historia-clinica', [HistoriaClinicaController::class, 'update'])
         ->name('pacientes.historia-clinica.update');
+
+    Route::post('/pacientes/{paciente}/consulta-express', [\App\Http\Controllers\EvolucionClinicaController::class, 'consultaExpress'])
+        ->name('pacientes.consulta-express');
 
     Route::get('/pacientes/{paciente}/odontograma/inicial', [OdontogramaController::class, 'inicial'])
         ->name('pacientes.odontograma.inicial');

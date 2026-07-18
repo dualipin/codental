@@ -1,121 +1,113 @@
 <template>
-    <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-        <div class="md:grid md:grid-cols-3 md:gap-6">
-            <div class="md:col-span-1">
-                <div class="px-4 sm:px-0">
-                    <h3 class="text-lg font-medium leading-6 text-gray-900">Evolución Clínica (SOAP)</h3>
-                    <p class="mt-1 text-sm text-gray-600">
-                        Complete la nota de evolución y la receta para cerrar la cita.
-                    </p>
-                </div>
-            </div>
-            
-            <div class="mt-5 md:mt-0 md:col-span-2">
-                <form @submit.prevent="submit">
-                    <div class="shadow sm:rounded-md sm:overflow-hidden">
-                        <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                            
-                            <!-- S: Subjetivo -->
-                            <div>
-                                <label for="subjetivo" class="block text-sm font-medium text-gray-700">Subjetivo (S)</label>
-                                <div class="mt-1">
-                                    <textarea id="subjetivo" v-model="form.subjetivo" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Motivo de consulta, síntomas del paciente..."></textarea>
-                                </div>
-                            </div>
+  <div class="mx-auto max-w-4xl py-10 sm:px-6 lg:px-8">
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+      <div class="card-body space-y-6">
 
-                            <!-- O: Objetivo -->
-                            <div>
-                                <label for="objetivo" class="block text-sm font-medium text-gray-700">Objetivo (O)</label>
-                                <div class="mt-1">
-                                    <textarea id="objetivo" v-model="form.objetivo" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Signos vitales, exploración física..."></textarea>
-                                </div>
-                            </div>
-
-                            <!-- A: Análisis -->
-                            <div>
-                                <label for="analisis" class="block text-sm font-medium text-gray-700">Análisis (A)</label>
-                                <div class="mt-1">
-                                    <textarea id="analisis" v-model="form.analisis" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Diagnóstico, evaluación del caso..."></textarea>
-                                </div>
-                            </div>
-
-                            <!-- P: Plan -->
-                            <div>
-                                <label for="plan" class="block text-sm font-medium text-gray-700">Plan (P)</label>
-                                <div class="mt-1">
-                                    <textarea id="plan" v-model="form.plan" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Tratamiento a seguir, próximas citas..."></textarea>
-                                </div>
-                            </div>
-
-                            <hr class="my-6">
-
-                            <!-- Tratamientos Realizados -->
-                            <div v-if="tratamientosPlanificados.length > 0">
-                                <h4 class="text-md font-medium text-gray-900 mb-2">Tratamientos del Odontograma</h4>
-                                <p class="text-sm text-gray-500 mb-4">Marque los tratamientos que fueron completados en esta cita.</p>
-                                
-                                <div class="space-y-2">
-                                    <div v-for="tratamiento in tratamientosPlanificados" :key="tratamiento.id" class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input :id="'tratamiento-' + tratamiento.id" v-model="form.tratamientos_completados" :value="tratamiento.id" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                                        </div>
-                                        <div class="ml-3 text-sm">
-                                            <label :for="'tratamiento-' + tratamiento.id" class="font-medium text-gray-700">{{ tratamiento.nombre }}</label>
-                                            <p class="text-gray-500">Diente: {{ tratamiento.diente }} | Cara: {{ tratamiento.cara }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <hr class="my-6">
-
-                            <!-- Receta Médica -->
-                            <PrescriptionBuilder v-model="form.recetas" />
-
-                        </div>
-                        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                            <button type="submit" :disabled="form.processing" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
-                                Guardar y Cerrar Cita
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-base-300 pb-5">
+          <div>
+            <h1 class="text-2xl font-bold">Evolución Clínica (SOAP)</h1>
+            <p class="text-sm text-base-content/70">Complete la nota de evolución para cerrar la cita.</p>
+          </div>
+          <div class="text-right text-sm">
+            <p class="font-semibold">
+              {{ cita.paciente.nombre }} {{ cita.paciente.apellido_paterno }} {{ cita.paciente.apellido_materno }}
+            </p>
+            <p class="text-base-content/60">Dr(a). {{ cita.dentista.nombre }} {{ cita.dentista.apellido_paterno }}</p>
+            <p class="text-base-content/50">{{ new Date(cita.fecha_inicio).toLocaleString('es-MX') }}</p>
+          </div>
         </div>
+
+        <form @submit.prevent="submit" class="space-y-6">
+
+          <div class="grid gap-6 md:grid-cols-2">
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Subjetivo (S)</span>
+              </label>
+              <textarea v-model="form.subjetivo" rows="4" class="textarea textarea-bordered w-full" placeholder="Motivo de consulta, síntomas del paciente..." />
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Objetivo (O)</span>
+              </label>
+              <textarea v-model="form.objetivo" rows="4" class="textarea textarea-bordered w-full" placeholder="Signos vitales, exploración física..." />
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Análisis (A)</span>
+              </label>
+              <textarea v-model="form.analisis" rows="4" class="textarea textarea-bordered w-full" placeholder="Diagnóstico, evaluación del caso..." />
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Plan (P)</span>
+              </label>
+              <textarea v-model="form.plan" rows="4" class="textarea textarea-bordered w-full" placeholder="Tratamiento a seguir, próximas citas..." />
+            </div>
+          </div>
+
+          <div v-if="tratamientosPlanificados.length > 0" class="border-t border-base-300 pt-5">
+            <h3 class="font-semibold mb-1">Tratamientos del Odontograma</h3>
+            <p class="text-sm text-base-content/60 mb-4">Marque los tratamientos que fueron completados en esta cita.</p>
+            <div class="space-y-2">
+              <div v-for="t in tratamientosPlanificados" :key="t.id" class="flex items-center gap-3 rounded-box border border-base-300 p-3">
+                <input :id="'t-' + t.id" :value="t.id" type="checkbox" class="checkbox checkbox-primary" v-model="form.tratamientos_completados" />
+                <label :for="'t-' + t.id" class="flex-1 cursor-pointer">
+                  <span class="font-medium">{{ t.nombre }}</span>
+                  <span class="text-sm text-base-content/60 ml-2">{{ t.diente }} | Cara: {{ t.cara }}</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-base-300 pt-5">
+            <PrescriptionBuilder v-model="form.recetas" />
+          </div>
+
+          <div class="border-t border-base-300 pt-5 flex justify-end gap-3">
+            <a :href="route('agenda.citas.confirmar', {cita: citaId})" class="btn btn-ghost">Cancelar</a>
+            <button type="submit" :disabled="form.processing" class="btn btn-primary">
+              Guardar y Cerrar Cita
+            </button>
+          </div>
+
+        </form>
+      </div>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
 import PrescriptionBuilder from '@/Components/PrescriptionBuilder.vue';
 import type { EvolutionNote } from '../../types';
 
-const props = defineProps({
-    citaId: {
-        type: Number,
-        required: true
-    },
-    tratamientosPlanificados: {
-        type: Array as () => any[],
-        default: () => []
-    }
-});
+const props = defineProps<{
+  citaId: number;
+  cita: {
+    fecha_inicio: string;
+    paciente: { nombre: string; apellido_paterno: string; apellido_materno: string | null };
+    dentista: { nombre: string; apellido_paterno: string; apellido_materno: string | null };
+  };
+  tratamientosPlanificados: { id: number; nombre: string; diente: string; cara: string }[];
+}>();
 
 const form = useForm<EvolutionNote>({
-    subjetivo: '',
-    objetivo: '',
-    analisis: '',
-    plan: '',
-    tratamientos_completados: [],
-    recetas: []
+  subjetivo: '',
+  objetivo: '',
+  analisis: '',
+  plan: '',
+  tratamientos_completados: [],
+  recetas: [],
 });
 
 const submit = () => {
-    form.post(route('evolucion.store', { cita: props.citaId }), {
-        preserveScroll: true,
-        onSuccess: () => {
-            // Manejar éxito, redirección manejada por el backend usualmente
-        }
-    });
+  form.post(route('evolucion.store', { cita: props.citaId }), {
+    preserveScroll: true,
+  });
 };
 </script>

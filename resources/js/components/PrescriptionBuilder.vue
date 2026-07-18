@@ -2,23 +2,23 @@
     <div class="space-y-4">
         <h3 class="text-lg font-medium text-gray-900">Receta Médica</h3>
         
-        <div v-for="(item, index) in modelValue" :key="index" class="flex gap-4 items-end bg-gray-50 p-4 rounded-lg">
-            <div class="flex-1">
+        <div v-for="(item, index) in modelValue" :key="index" class="flex flex-col gap-3 p-4 rounded-lg bg-gray-50 md:flex-row md:items-end">
+            <div class="flex-1 min-w-0">
                 <label class="block text-sm font-medium text-gray-700">Medicamento</label>
                 <input v-model="item.medicamento" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Ej. Amoxicilina 500mg" required />
             </div>
             
-            <div class="flex-1">
+            <div class="flex-1 min-w-0">
                 <label class="block text-sm font-medium text-gray-700">Dosis</label>
                 <input v-model="item.dosis" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Ej. 1 cápsula" required />
             </div>
 
-            <div class="flex-1">
+            <div class="flex-1 min-w-0">
                 <label class="block text-sm font-medium text-gray-700">Frecuencia</label>
                 <input v-model="item.frecuencia" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Ej. Cada 8 horas" required />
             </div>
 
-            <div class="flex-1">
+            <div class="flex-1 min-w-0">
                 <label class="block text-sm font-medium text-gray-700">Duración</label>
                 <input v-model="item.duracion" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Ej. 7 días" required />
             </div>

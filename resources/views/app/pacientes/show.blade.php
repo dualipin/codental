@@ -12,7 +12,13 @@
 
     <div class="flex items-center justify-between mb-4">
         <h1 class="text-2xl font-bold">{{ $paciente->nombre }} {{ $paciente->apellido_paterno }}</h1>
-        <div class="flex gap-2">
+        <div class="flex gap-2 flex-wrap">
+            @if ($puedeEditarAntecedentesMedicos)
+                <form action="{{ route('pacientes.consulta-express', $paciente) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-accent" onclick="return confirm('¿Iniciar una consulta express sin cita previa?')">Consulta Express</button>
+                </form>
+            @endif
             <a href="{{ route('agenda', ['paciente' => $paciente->id]) }}" class="btn btn-primary">Agendar cita</a>
             @if ($puedeEditarAntecedentesMedicos)
                 <a href="{{ route('pacientes.historia-clinica.edit', $paciente) }}" class="btn btn-primary">Editar historia clínica</a>

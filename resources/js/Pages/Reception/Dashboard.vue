@@ -13,9 +13,9 @@
             </div>
 
             <ul role="list" class="divide-y divide-base-300">
-                <li v-if="followUpPatients.length === 0" class="py-4 text-sm text-base-content/70">
+                <li v-if="followUpPatients.length === 0" class="py-4">
                     <div role="alert" class="alert">
-                        No hay pacientes que requieran seguimiento en este momento.
+                        <span>No hay pacientes que requieran seguimiento en este momento.</span>
                     </div>
                 </li>
 

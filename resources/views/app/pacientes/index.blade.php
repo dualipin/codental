@@ -44,8 +44,18 @@
                             @endswitch
                         </td>
                         <td>{{ $paciente->fecha_nacimiento->format('d/m/Y') }}</td>
-                        <td class="flex gap-1">
+                        <td class="flex gap-1 flex-wrap">
                             <a href="{{ route('pacientes.show', $paciente) }}" class="btn btn-xs btn-soft">Ver</a>
+                            @php
+                                $rol = auth()->user()?->rol?->value;
+                                $puedeConsultar = in_array($rol, [\App\Enums\UserRolEnum::DENTISTA->value, \App\Enums\UserRolEnum::ADMINISTRADOR->value], true);
+                            @endphp
+                            @if($puedeConsultar)
+                                <form action="{{ route('pacientes.consulta-express', $paciente) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-xs btn-accent" onclick="return confirm('¿Iniciar consulta express?')">Consulta Express</button>
+                                </form>
+                            @endif
                             <a href="{{ route('pacientes.edit', $paciente) }}" class="btn btn-xs btn-warning">Editar</a>
                             @if (!$paciente->verificado)
                                 <form action="{{ route('pacientes.verify', $paciente) }}" method="POST" onsubmit="return confirm('¿Verificar paciente?')">

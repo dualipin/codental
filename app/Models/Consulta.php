@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use Database\Factories\ConsultaFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Consulta extends Model
 {
+    /** @use HasFactory<ConsultaFactory> */
+    use HasFactory;
+
     protected $table = 'consultas';
     protected $guarded = [];
 

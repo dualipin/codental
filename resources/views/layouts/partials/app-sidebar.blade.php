@@ -18,15 +18,27 @@
             @endphp
 
             <ul class="menu menu-lg rounded-box gap-1">
-                <li class="menu-title"><span>General</span></li>
                 @if($esRecep)
+                    <li class="menu-title"><span>General</span></li>
                     <li>
                         <a href="{{ route('recepcion.dashboard') }}">
                             <i class="bi bi-house-fill"></i> Dashboard
                         </a>
                     </li>
+                    <li><a href="{{ route('agenda') }}"><i class="bi bi-calendar-week-fill"></i> Agenda</a></li>
+                @else
+                    <li class="menu-title"><span>Clínica</span></li>
+                    <li>
+                        <a href="{{ route('agenda') }}">
+                            <i class="bi bi-calendar-week-fill"></i> Agenda
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('pacientes.index') }}">
+                            <i class="bi bi-lightning-charge-fill"></i> Consulta Express
+                        </a>
+                    </li>
                 @endif
-                <li><a href="{{ route('agenda') }}"><i class="bi bi-calendar-week-fill"></i> Agenda</a></li>
                 <li>
                     <details>
                         <summary>

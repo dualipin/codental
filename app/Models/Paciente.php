@@ -7,6 +7,7 @@ use App\Enums\SexoEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Paciente extends Model
@@ -38,14 +39,19 @@ class Paciente extends Model
         return $this->hasOne(HistoriaClinica::class, 'paciente_id');
     }
 
+    public function odontogramas(): HasMany
+    {
+        return $this->hasMany(Odontograma::class, 'paciente_id');
+    }
+
     public function evolucionesClinicas(): HasMany
     {
         return $this->hasMany(EvolucionClinica::class, 'paciente_id');
     }
 
-    public function recetas(): HasMany
+    public function recetas(): HasManyThrough
     {
-        return $this->hasMany(Receta::class, 'paciente_id');
+        return $this->hasManyThrough(Receta::class, Cita::class, 'paciente_id', 'cita_id');
     }
 
     public function scopeNeedsFollowUp($query)

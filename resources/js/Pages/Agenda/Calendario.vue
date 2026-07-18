@@ -287,7 +287,7 @@ const calendarOptions = computed<CalendarOptions>(() => ({
     <div class="space-y-1">
       <h1 class="text-2xl font-bold">Agenda de citas</h1>
       <p class="text-sm text-base-content/70">{{ resumenVista }}</p>
-      <div v-if="pacienteSeleccionado" class="badge badge-primary badge-outline mt-1">
+      <div v-if="pacienteSeleccionado" class="badge badge-primary badge-outline mt-1 max-w-full truncate">
         Paciente cargado: {{ pacienteSeleccionado.nombre }} {{ pacienteSeleccionado.apellido_paterno }}
       </div>
     </div>
@@ -321,8 +321,8 @@ const calendarOptions = computed<CalendarOptions>(() => ({
       </div>
     </div>
 
-    <div class="card bg-base-100 border border-base-300 shadow-sm">
-      <div class="card-body p-4 md:p-6">
+    <div class="card bg-base-100 border border-base-300 shadow-sm overflow-x-auto">
+      <div class="card-body p-4 md:p-6 min-w-[640px]">
         <FullCalendar :options="calendarOptions" />
       </div>
     </div>
@@ -360,10 +360,10 @@ const calendarOptions = computed<CalendarOptions>(() => ({
               class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-base-200"
               @click="seleccionarPaciente(paciente)"
             >
-              <span>
+              <span class="truncate min-w-0">
                 {{ paciente.nombre }} {{ paciente.apellido_paterno }} {{ paciente.apellido_materno }}
               </span>
-              <span class="text-xs text-base-content/50">{{ paciente.telefono }}</span>
+              <span class="text-xs text-base-content/50 shrink-0">{{ paciente.telefono }}</span>
             </button>
 
             <div v-if="pacientesFiltrados.length === 0" class="px-4 py-3 text-sm text-base-content/60">

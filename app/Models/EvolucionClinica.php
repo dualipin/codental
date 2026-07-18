@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\EvolucionClinicaFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class EvolucionClinica extends Model
 {
+    /** @use HasFactory<EvolucionClinicaFactory> */
+    use HasFactory;
+
     protected $table = 'evolucion_clinicas';
     protected $guarded = [];
 

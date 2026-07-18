@@ -202,8 +202,10 @@ function limpiarFiltros() {
           </div>
 
           <!-- Calendario -->
-          <div v-if="dentistaId" class="mt-2">
-            <FullCalendar :options="calendarOptions"/>
+          <div v-if="dentistaId" class="mt-2 overflow-x-auto">
+            <div class="min-w-[640px]">
+              <FullCalendar :options="calendarOptions"/>
+            </div>
           </div>
 
           <div v-else class="flex flex-col items-center justify-center py-16 text-base-content/50">

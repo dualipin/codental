@@ -2,11 +2,19 @@
 
 namespace App\Models;
 
+use Database\Factories\AbonoFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Abono extends Model
 {
+    /** @use HasFactory<AbonoFactory> */
+    use HasFactory;
+
+    public $timestamps = false;
+
+
     protected $table = 'abonos';
     protected $guarded = [];
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue'
-import {Head, router} from '@inertiajs/vue3'
+import {Head, router, usePage} from '@inertiajs/vue3'
 import {route} from 'ziggy-js'
 
 type Cita = {
@@ -48,7 +48,20 @@ const coloresPorEstatus: Record<string, { fondo: string; texto: string }> = {
   Cancelada: { fondo: 'badge-neutral', texto: 'Cancelada' },
 }
 
+const page = usePage()
+const currentUser = computed(() => (page.props.auth as any)?.user ?? null)
+
 const badgeEstatus = computed(() => coloresPorEstatus[props.cita.estatus] ?? { fondo: 'badge-ghost', texto: props.cita.estatus })
+
+const puedeIniciarConsulta = computed(() => {
+  if (!currentUser.value) return false
+  if (props.cita.estatus === 'Finalizado' || props.cita.estatus === 'Cancelada') return false
+  const esAdmin = currentUser.value.rol === 'admin'
+  const esSuCita = currentUser.value.id === props.cita.dentista.id
+  return esAdmin || esSuCita
+})
+
+const evolucionId = computed(() => (page.props.flash as any)?.evolucion_id ?? null)
 
 const nombreCompleto = computed(() => [
   props.cita.paciente.nombre,
@@ -113,7 +126,21 @@ function cancelar() {
           <h1 class="text-3xl font-bold">Confirmar cita</h1>
           <p class="text-sm text-base-content/70">Revisa el expediente y decide si la cita se confirma o se cancela.</p>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-2 flex-wrap">
+          <a
+            v-if="evolucionId"
+            :href="route('evolucion.pdf', {evolucion: evolucionId})"
+            class="btn btn-outline btn-accent"
+          >
+            Descargar PDF de Evolución
+          </a>
+          <a
+            v-if="puedeIniciarConsulta"
+            :href="route('evolucion.create', {cita: props.cita.id})"
+            class="btn btn-accent"
+          >
+            Iniciar Consulta
+          </a>
           <button class="btn btn-success" :disabled="processing" @click="confirmar">Confirmar</button>
           <button class="btn btn-error" :disabled="processing" @click="cancelar">Cancelar</button>
           <a
@@ -169,11 +196,11 @@ function cancelar() {
               <div class="rounded-box border border-base-300 p-4">
                 <p class="text-sm text-base-content/50">Datos generales</p>
                 <div class="mt-3 space-y-2 text-sm">
-                  <p><span class="font-medium">Nombre:</span> {{ nombreCompleto }}</p>
+                  <p class="break-words"><span class="font-medium">Nombre:</span> {{ nombreCompleto }}</p>
                   <p><span class="font-medium">Correo:</span> {{ cita.paciente.correo_electronico ?? '—' }}</p>
                   <p><span class="font-medium">Nacimiento:</span> {{ cita.paciente.fecha_nacimiento ?? '—' }}</p>
                   <p><span class="font-medium">Sexo:</span> {{ cita.paciente.sexo ?? '—' }}</p>
-                  <p><span class="font-medium">Dirección:</span> {{ cita.paciente.direccion ?? '—' }}</p>
+                  <p class="break-words"><span class="font-medium">Dirección:</span> {{ cita.paciente.direccion ?? '—' }}</p>
                 </div>
               </div>
 
