@@ -64,4 +64,6 @@ RUN mkdir -p \
 
 EXPOSE 80
 
-CMD ["frankenphp", "php-server", "--root", "public"]
+CMD mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs && \
+    chown -R www-data:www-data storage bootstrap/cache && \
+    frankenphp php-server --root public
