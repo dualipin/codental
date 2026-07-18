@@ -64,6 +64,7 @@ RUN mkdir -p \
 
 EXPOSE 80
 
-CMD mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs && \
-    chown -R www-data:www-data storage bootstrap/cache && \
+CMD mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions storage/logs && \
+    php artisan optimize && \
+    php artisan migrate --force && \
     frankenphp php-server -r public/
