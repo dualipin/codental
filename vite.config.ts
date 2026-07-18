@@ -19,11 +19,6 @@ export default defineConfig({
         ssr: false,
     }),
   ],
-  resolve: {
-    alias: {
-      'ziggy-js': path.resolve(__dirname, 'vendor/tightenco/ziggy'),
-    },
-  },
   server: {
     watch: {
       ignored: ['**/storage/framework/views/**'],

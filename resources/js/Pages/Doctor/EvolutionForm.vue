@@ -84,7 +84,7 @@
 import { useForm } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import PrescriptionBuilder from '@/Components/PrescriptionBuilder.vue';
-import type { EvolutionNote } from '../../types';
+import type { EvolutionNote } from '@/types';
 
 const props = defineProps<{
   citaId: number;
