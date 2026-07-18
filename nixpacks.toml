@@ -1,0 +1,18 @@
+providers = ["php", "node"]
+
+[phases.install]
+# Instala tanto las dependencias de backend como las de frontend
+cmds = [
+    "composer install --no-dev --optimize-autoloader --no-interaction",
+    "npm install"
+]
+
+[phases.build]
+# Compila los archivos de Vite (esto soluciona tu error del manifest) y optimiza Laravel
+cmds = [
+    "npm run build",
+    "php artisan config:cache",
+    "php artisan route:cache",
+    "php artisan view:cache",
+    "php artisan event:cache"
+]
