@@ -43,7 +43,7 @@
                                 @case('O') Otro @break
                             @endswitch
                         </td>
-                        <td>{{ $paciente->fecha_nacimiento->format('d/m/Y') }}</td>
+                        <td>{{ $paciente->fecha_nacimiento ? (optional($paciente->fecha_nacimiento)->format('d/m/Y') ?? $paciente->fecha_nacimiento) : '—' }}</td>
                         <td class="flex gap-1 flex-wrap">
                             <a href="{{ route('pacientes.show', $paciente) }}" class="btn btn-xs btn-soft">Ver</a>
                             @php

@@ -57,7 +57,7 @@
 
             <label class="form-control">
                 <span class="label">Fecha de nacimiento</span>
-                <input type="date" name="fecha_nacimiento" class="input w-full" value="{{ old('fecha_nacimiento', $paciente->fecha_nacimiento->format('Y-m-d')) }}" required>
+                <input type="date" name="fecha_nacimiento" class="input w-full" value="{{ old('fecha_nacimiento', $paciente->fecha_nacimiento ? (optional($paciente->fecha_nacimiento)->format('Y-m-d') ?? $paciente->fecha_nacimiento) : '') }}" required>
             </label>
 
             <label class="form-control">

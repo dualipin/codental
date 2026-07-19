@@ -68,11 +68,11 @@
             </div>
             <div>
                 <span class="label">Fecha de nacimiento</span>
-                <p>{{ $paciente->fecha_nacimiento->format('d/m/Y') }}</p>
+                <p>{{ $paciente->fecha_nacimiento ? (optional($paciente->fecha_nacimiento)->format('d/m/Y') ?? $paciente->fecha_nacimiento) : '—' }}</p>
             </div>
             <div>
                 <span class="label">Edad</span>
-                <p>{{ $paciente->fecha_nacimiento->age }} años</p>
+                <p>{{ $paciente->fecha_nacimiento ? (optional($paciente->fecha_nacimiento)->age ?? '—') : '—' }} años</p>
             </div>
             <div>
                 <span class="label">Estado civil</span>
@@ -178,7 +178,7 @@
                         <tbody>
                             @foreach ($paciente->consultas as $consulta)
                                 <tr>
-                                    <td>{{ $consulta->fecha_consulta->format('d/m/Y') }}</td>
+                                    <td>{{ $consulta->fecha_consulta ? (optional($consulta->fecha_consulta)->format('d/m/Y') ?? $consulta->fecha_consulta) : '—' }}</td>
                                     <td class="max-w-xs truncate">{{ $consulta->motivo_consulta ?? '—' }}</td>
                                     <td>{{ $consulta->odontologo?->nombre ?? '—' }}</td>
                                     <td class="max-w-xs truncate">{{ $consulta->nota_evolucion ?? '—' }}</td>
@@ -239,8 +239,8 @@
                         <tbody>
                             @foreach ($paciente->presupuestos as $presupuesto)
                                 <tr>
-                                    <td>{{ $presupuesto->fecha_emision->format('d/m/Y') }}</td>
-                                    <td>{{ $presupuesto->fecha_vencimiento->format('d/m/Y') }}</td>
+                                    <td>{{ $presupuesto->fecha_emision ? (optional($presupuesto->fecha_emision)->format('d/m/Y') ?? $presupuesto->fecha_emision) : '—' }}</td>
+                                    <td>{{ $presupuesto->fecha_vencimiento ? (optional($presupuesto->fecha_vencimiento)->format('d/m/Y') ?? $presupuesto->fecha_vencimiento) : '—' }}</td>
                                     <td>${{ number_format($presupuesto->monto, 2) }}</td>
                                     <td>
                                         @switch($presupuesto->estado)
