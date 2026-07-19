@@ -2,7 +2,7 @@
 
 @section('head')
     @routes
-    @vite(['resources/css/app.css', 'resources/js/app.ts',  "resources/js/Pages/{$page['component']}.vue"])
+    @vite(['resources/css/app.css', 'resources/js/app.ts'])
     @inertiaHead
 @endsection
 

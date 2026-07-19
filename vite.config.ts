@@ -17,6 +17,7 @@ export default defineConfig({
       }),
     inertia({
         ssr: false,
+        pages: 'resources/js/Pages',
     }),
   ],
   server: {

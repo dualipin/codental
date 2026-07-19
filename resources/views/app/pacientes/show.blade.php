@@ -116,7 +116,7 @@
                                 <div><span class="font-medium">Medicación actual:</span> {{ $hc->medicacion_actual ?? '—' }}</div>
                                 <div><span class="font-medium">Médico:</span> {{ $hc->nombre_medico ?? '—' }}</div>
                                 <div><span class="font-medium">Tel. médico:</span> {{ $hc->telefono_medico ?? '—' }}</div>
-                                <div class="md:col-span-2"><span class="font-medium">Enfermedades previas:</span> {{ is_array($hc->enfermedades_previas) ? implode(', ', $hc->enfermedades_previas) : ($hc->enfermedades_previas ?? '—') }}</div>
+                                <div class="md:col-span-2"><span class="font-medium">Enfermedades previas:</span> {{ is_array($hc->enfermedades_previas) ? implode(', ', collect($hc->enfermedades_previas)->flatten()->toArray()) : ($hc->enfermedades_previas ?? '—') }}</div>
                                 <div class="md:col-span-2"><span class="font-medium">Otras enfermedades:</span> {{ $hc->otras_enfermedades ?? '—' }}</div>
                                 <div class="md:col-span-2"><span class="font-medium">Cirugías / hospitalizaciones:</span> {{ $hc->cirugias_hospitalizaciones ?? '—' }}</div>
                             </div>
@@ -128,9 +128,9 @@
                         <div class="collapse-content text-sm">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <div><span class="font-medium">Grupo sanguíneo:</span> {{ $hc->grupo_sanguineo ?? '—' }}</div>
-                                <div><span class="font-medium">Habitos tóxicos:</span> {{ is_array($hc->habitos_toxicos) ? implode(', ', $hc->habitos_toxicos) : ($hc->habitos_toxicos ?? '—') }}</div>
-                                <div><span class="font-medium">Estilo de vida:</span> {{ is_array($hc->estilo_vida) ? implode(', ', $hc->estilo_vida) : ($hc->estilo_vida ?? '—') }}</div>
-                                <div><span class="font-medium">Ginecoobstétricos:</span> {{ is_array($hc->ginecoobstetricos) ? implode(', ', $hc->ginecoobstetricos) : ($hc->ginecoobstetricos ?? '—') }}</div>
+                                <div><span class="font-medium">Habitos tóxicos:</span> {{ is_array($hc->habitos_toxicos) ? implode(', ', collect($hc->habitos_toxicos)->flatten()->toArray()) : ($hc->habitos_toxicos ?? '—') }}</div>
+                                <div><span class="font-medium">Estilo de vida:</span> {{ is_array($hc->estilo_vida) ? implode(', ', collect($hc->estilo_vida)->flatten()->toArray()) : ($hc->estilo_vida ?? '—') }}</div>
+                                <div><span class="font-medium">Ginecoobstétricos:</span> {{ is_array($hc->ginecoobstetricos) ? implode(', ', collect($hc->ginecoobstetricos)->flatten()->toArray()) : ($hc->ginecoobstetricos ?? '—') }}</div>
                             </div>
                         </div>
                     </div>
@@ -150,8 +150,8 @@
                         <div class="collapse-title font-semibold">Antecedentes bucodentales y ATM</div>
                         <div class="collapse-content text-sm">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <div class="md:col-span-2"><span class="font-medium">Bucodentales:</span> {{ is_array($hc->antecedentes_bucodentales) ? implode(', ', $hc->antecedentes_bucodentales) : ($hc->antecedentes_bucodentales ?? '—') }}</div>
-                                <div class="md:col-span-2"><span class="font-medium">ATM:</span> {{ is_array($hc->atm) ? implode(', ', $hc->atm) : ($hc->atm ?? '—') }}</div>
+                                <div class="md:col-span-2"><span class="font-medium">Bucodentales:</span> {{ is_array($hc->antecedentes_bucodentales) ? implode(', ', collect($hc->antecedentes_bucodentales)->flatten()->toArray()) : ($hc->antecedentes_bucodentales ?? '—') }}</div>
+                                <div class="md:col-span-2"><span class="font-medium">ATM:</span> {{ is_array($hc->atm) ? implode(', ', collect($hc->atm)->flatten()->toArray()) : ($hc->atm ?? '—') }}</div>
                                 <div class="md:col-span-2"><span class="font-medium">Tejidos blandos/duros:</span> {{ $hc->tejidos_blandos_duros ?? '—' }}</div>
                             </div>
                         </div>
