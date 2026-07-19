@@ -12,40 +12,40 @@
 
     <div class="flex items-center justify-between mb-4">
         <h1 class="text-2xl font-bold">{{ $paciente->nombre }} {{ $paciente->apellido_paterno }}</h1>
-        <div class="flex gap-2 flex-wrap">
+        <div class="flex gap-2 flex-wrap max-sm:flex-col">
             @if ($puedeEditarAntecedentesMedicos)
-                <form action="{{ route('pacientes.consulta-express', $paciente) }}" method="POST">
+                <form action="{{ route('pacientes.consulta-express', $paciente) }}" method="POST" class="max-sm:w-full">
                     @csrf
-                    <button type="submit" class="btn btn-accent" onclick="return confirm('¿Iniciar una consulta express sin cita previa?')">Consulta Express</button>
+                    <button type="submit" class="btn btn-accent max-sm:w-full" onclick="return confirm('¿Iniciar una consulta express sin cita previa?')">Consulta Express</button>
                 </form>
             @endif
-            <a href="{{ route('agenda', ['paciente' => $paciente->id]) }}" class="btn btn-primary">Agendar cita</a>
+            <a href="{{ route('agenda', ['paciente' => $paciente->id]) }}" class="btn btn-primary max-sm:w-full">Agendar cita</a>
             @if ($puedeEditarAntecedentesMedicos)
-                <a href="{{ route('pacientes.historia-clinica.edit', $paciente) }}" class="btn btn-primary">Editar historia clínica</a>
+                <a href="{{ route('pacientes.historia-clinica.edit', $paciente) }}" class="btn btn-primary max-sm:w-full">Editar historia clínica</a>
             @endif
             @if (!$paciente->verificado)
-                <form action="{{ route('pacientes.verify', $paciente) }}" method="POST" onsubmit="return confirm('¿Verificar paciente?')">
+                <form action="{{ route('pacientes.verify', $paciente) }}" method="POST" onsubmit="return confirm('¿Verificar paciente?')" class="max-sm:w-full">
                     @csrf
-                    <button class="btn btn-success">Verificar</button>
+                    <button class="btn btn-success max-sm:w-full">Verificar</button>
                 </form>
             @else
-                <form action="{{ route('pacientes.verify', $paciente) }}" method="POST" onsubmit="return confirm('¿Quitar verificación al paciente?')">
+                <form action="{{ route('pacientes.verify', $paciente) }}" method="POST" onsubmit="return confirm('¿Quitar verificación al paciente?')" class="max-sm:w-full">
                     @csrf
-                    <button class="btn btn-outline btn-error">Quitar verificación</button>
+                    <button class="btn btn-outline btn-error max-sm:w-full">Quitar verificación</button>
                 </form>
             @endif
-            <a href="{{ route('pacientes.edit', $paciente) }}" class="btn btn-warning">Editar</a>
-            <a href="{{ route('pacientes.index') }}" class="btn btn-soft">Volver</a>
+            <a href="{{ route('pacientes.edit', $paciente) }}" class="btn btn-warning max-sm:w-full">Editar</a>
+            <a href="{{ route('pacientes.index') }}" class="btn btn-soft max-sm:w-full">Volver</a>
         </div>
     </div>
 
-    <div class="flex flex-wrap gap-2 mb-6">
-        <a href="{{ route('pacientes.show', $paciente) }}" class="btn btn-soft">Datos personales</a>
+    <div class="flex flex-wrap gap-2 mb-6 max-sm:flex-col">
+        <a href="{{ route('pacientes.show', $paciente) }}" class="btn btn-soft max-sm:w-full">Datos personales</a>
         @if ($puedeEditarAntecedentesMedicos)
-            <a href="{{ route('pacientes.historia-clinica.edit', $paciente) }}" class="btn btn-soft">Historia clínica</a>
+            <a href="{{ route('pacientes.historia-clinica.edit', $paciente) }}" class="btn btn-soft max-sm:w-full">Historia clínica</a>
         @endif
-        <a href="{{ route('pacientes.odontograma.inicial', $paciente) }}" class="btn btn-soft">Odontograma inicial</a>
-        <a href="{{ route('pacientes.odontograma.final', $paciente) }}" class="btn btn-soft">Odontograma final / seguimiento</a>
+        <a href="{{ route('pacientes.odontograma.inicial', $paciente) }}" class="btn btn-soft max-sm:w-full">Odontograma inicial</a>
+        <a href="{{ route('pacientes.odontograma.final', $paciente) }}" class="btn btn-soft max-sm:w-full">Odontograma final / seguimiento</a>
     </div>
 
     <div class="card p-6 mb-6">
